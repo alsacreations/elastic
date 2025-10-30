@@ -12,6 +12,7 @@
  */
 
 body {
+  padding: var(--spacing-m);
   background-color: var(--surface);
   color: var(--on-surface);
   font-family: var(--font-base);
@@ -34,4 +35,27 @@ body {
 .title-s {
   font-size: var(--text-s);
   font-weight: var(--font-weight-semibold);
+}
+
+table {
+  --table-border-color: transparent;
+  --table-border-collapse: separate;
+  --table-border-spacing: var(--spacing-4);
+
+  & thead th {
+    background: none;
+  }
+
+  & th,
+  & td {
+    padding: 0;
+  }
+}
+
+.controls {
+  padding: var(--spacing-s) var(--spacing-4);
+}
+
+[id="css-outputs"] {
+  margin-block: var(--spacing-m);
 }

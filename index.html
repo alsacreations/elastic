@@ -13,9 +13,540 @@
     </header>
 
     <main class="main" role="main">
+      <div data-layout="duo">
+        <section id="clamp-app" aria-labelledby="clamp-app-title">
+          <h2 id="clamp-app-title" class="title-m">
+            Générateur de polices fluides
+          </h2>
+
+          <p class="visually-hidden" id="clamp-desc">
+            Tableau éditable : colonnes slug, min (px), max (px). Le CSS généré
+            apparaît dans la zone de sortie et est mis à jour automatiquement.
+          </p>
+
+          <div role="region" aria-labelledby="clamp-app-title">
+            <table id="clamp-table" class="table" aria-describedby="clamp-desc">
+              <caption class="visually-hidden">
+                Liste des variables à générer
+              </caption>
+              <thead>
+                <tr>
+                  <th scope="col">slug</th>
+                  <th scope="col">min (px)</th>
+                  <th scope="col">max (px)</th>
+                  <th scope="col" class="visually-hidden">actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <input
+                      type="text"
+                      class="input-slug"
+                      value="text-s"
+                      aria-label="slug"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      class="input-min"
+                      value="14"
+                      aria-label="min en pixels"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      class="input-max"
+                      value="14"
+                      aria-label="max en pixels"
+                    />
+                  </td>
+                  <td>
+                    <button
+                      type="button"
+                      class="btn-remove"
+                      aria-label="Supprimer la ligne"
+                    >
+                      ✕
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <input
+                      type="text"
+                      class="input-slug"
+                      value="text-m"
+                      aria-label="slug"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      class="input-min"
+                      value="16"
+                      aria-label="min en pixels"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      class="input-max"
+                      value="18"
+                      aria-label="max en pixels"
+                    />
+                  </td>
+                  <td>
+                    <button
+                      type="button"
+                      class="btn-remove"
+                      aria-label="Supprimer la ligne"
+                    >
+                      ✕
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <input
+                      type="text"
+                      class="input-slug"
+                      value="text-l"
+                      aria-label="slug"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      class="input-min"
+                      value="18"
+                      aria-label="min en pixels"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      class="input-max"
+                      value="20"
+                      aria-label="max en pixels"
+                    />
+                  </td>
+                  <td>
+                    <button
+                      type="button"
+                      class="btn-remove"
+                      aria-label="Supprimer la ligne"
+                    >
+                      ✕
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <input
+                      type="text"
+                      class="input-slug"
+                      value="text-xl"
+                      aria-label="slug"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      class="input-min"
+                      value="20"
+                      aria-label="min en pixels"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      class="input-max"
+                      value="30"
+                      aria-label="max en pixels"
+                    />
+                  </td>
+                  <td>
+                    <button
+                      type="button"
+                      class="btn-remove"
+                      aria-label="Supprimer la ligne"
+                    >
+                      ✕
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <input
+                      type="text"
+                      class="input-slug"
+                      value="text-2xl"
+                      aria-label="slug"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      class="input-min"
+                      value="24"
+                      aria-label="min en pixels"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      class="input-max"
+                      value="36"
+                      aria-label="max en pixels"
+                    />
+                  </td>
+                  <td>
+                    <button
+                      type="button"
+                      class="btn-remove"
+                      aria-label="Supprimer la ligne"
+                    >
+                      ✕
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <input
+                      type="text"
+                      class="input-slug"
+                      value="text-3xl"
+                      aria-label="slug"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      class="input-min"
+                      value="30"
+                      aria-label="min en pixels"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      class="input-max"
+                      value="48"
+                      aria-label="max en pixels"
+                    />
+                  </td>
+                  <td>
+                    <button
+                      type="button"
+                      class="btn-remove"
+                      aria-label="Supprimer la ligne"
+                    >
+                      ✕
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <input
+                      type="text"
+                      class="input-slug"
+                      value="text-4xl"
+                      aria-label="slug"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      class="input-min"
+                      value="48"
+                      aria-label="min en pixels"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      class="input-max"
+                      value="80"
+                      aria-label="max en pixels"
+                    />
+                  </td>
+                  <td>
+                    <button
+                      type="button"
+                      class="btn-remove"
+                      aria-label="Supprimer la ligne"
+                    >
+                      ✕
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div data-layout="cluster" data-gap="s" class="controls">
+              <button id="btn-add" type="button">Ajouter une ligne</button>
+              <button id="btn-copy" type="button">Copier le CSS</button>
+            </div>
+
+            <!-- theme and tokens outputs moved to a dedicated duo section below -->
+
+            <div
+              id="clamp-status"
+              class="visually-hidden"
+              aria-live="polite"
+            ></div>
+          </div>
+        </section>
+
+        <section id="spacing-app" aria-labelledby="spacing-app-title">
+          <h2 id="spacing-app-title" class="title-m">
+            Générateur d'espacements fluides
+          </h2>
+
+          <p class="visually-hidden" id="spacing-desc">
+            Tableau éditable : colonnes slug, min (px), max (px) pour les
+            espacements.
+          </p>
+
+          <div role="region" aria-labelledby="spacing-app-title">
+            <table
+              id="spacing-table"
+              class="table"
+              aria-describedby="spacing-desc"
+            >
+              <caption class="visually-hidden">
+                Liste des espacements à générer
+              </caption>
+              <thead>
+                <tr>
+                  <th scope="col">slug</th>
+                  <th scope="col">min (px)</th>
+                  <th scope="col">max (px)</th>
+                  <th scope="col" class="visually-hidden">actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <input
+                      type="text"
+                      class="input-slug"
+                      value="spacing-xs"
+                      aria-label="slug"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      class="input-min"
+                      value="4"
+                      aria-label="min en pixels"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      class="input-max"
+                      value="4"
+                      aria-label="max en pixels"
+                    />
+                  </td>
+                  <td>
+                    <button
+                      type="button"
+                      class="btn-remove"
+                      aria-label="Supprimer la ligne"
+                    >
+                      ✕
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <input
+                      type="text"
+                      class="input-slug"
+                      value="spacing-s"
+                      aria-label="slug"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      class="input-min"
+                      value="8"
+                      aria-label="min en pixels"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      class="input-max"
+                      value="16"
+                      aria-label="max en pixels"
+                    />
+                  </td>
+                  <td>
+                    <button
+                      type="button"
+                      class="btn-remove"
+                      aria-label="Supprimer la ligne"
+                    >
+                      ✕
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <input
+                      type="text"
+                      class="input-slug"
+                      value="spacing-m"
+                      aria-label="slug"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      class="input-min"
+                      value="16"
+                      aria-label="min en pixels"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      class="input-max"
+                      value="32"
+                      aria-label="max en pixels"
+                    />
+                  </td>
+                  <td>
+                    <button
+                      type="button"
+                      class="btn-remove"
+                      aria-label="Supprimer la ligne"
+                    >
+                      ✕
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <input
+                      type="text"
+                      class="input-slug"
+                      value="spacing-l"
+                      aria-label="slug"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      class="input-min"
+                      value="24"
+                      aria-label="min en pixels"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      class="input-max"
+                      value="48"
+                      aria-label="max en pixels"
+                    />
+                  </td>
+                  <td>
+                    <button
+                      type="button"
+                      class="btn-remove"
+                      aria-label="Supprimer la ligne"
+                    >
+                      ✕
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <input
+                      type="text"
+                      class="input-slug"
+                      value="spacing-xl"
+                      aria-label="slug"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      class="input-min"
+                      value="32"
+                      aria-label="min en pixels"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      class="input-max"
+                      value="80"
+                      aria-label="max en pixels"
+                    />
+                  </td>
+                  <td>
+                    <button
+                      type="button"
+                      class="btn-remove"
+                      aria-label="Supprimer la ligne"
+                    >
+                      ✕
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div data-layout="cluster" class="controls">
+              <button id="btn-add-spacing" type="button">
+                Ajouter une ligne
+              </button>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <section
+        data-layout="duo"
+        id="css-outputs"
+        aria-labelledby="css-outputs-title"
+      >
+        <h2 id="css-outputs-title" class="visually-hidden">Sortie CSS</h2>
+        <div>
+          <label for="css-output-theme">theme.css</label>
+          <textarea
+            id="css-output-theme"
+            rows="14"
+            cols="40"
+            readonly
+          ></textarea>
+        </div>
+        <div>
+          <label for="css-output-tokens">theme-tokens.css</label>
+          <textarea
+            id="css-output-tokens"
+            rows="14"
+            cols="40"
+            readonly
+          ></textarea>
+        </div>
+      </section>
+
       <img src="img/alsacreations.svg" alt="alsacreations" />
     </main>
 
     <footer class="footer" role="contentinfo"></footer>
+
+    <script type="module" src="assets/js/clamp/app.js"></script>
   </body>
 </html>
