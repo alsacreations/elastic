@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Projet XXX</title>
+    <title>Elastic, générateur d'espacements fluides</title>
     <link rel="icon" type="image/svg+xml" href="img/favicon.svg" />
     <link rel="stylesheet" href="assets/css/app.css" />
   </head>
@@ -288,7 +288,6 @@
 
             <div data-layout="cluster" data-gap="s" class="controls">
               <button id="btn-add" type="button">Ajouter une ligne</button>
-              <button id="btn-copy" type="button">Copier le CSS</button>
             </div>
 
             <!-- theme and tokens outputs moved to a dedicated duo section below -->
@@ -522,23 +521,41 @@
         aria-labelledby="css-outputs-title"
       >
         <h2 id="css-outputs-title" class="visually-hidden">Sortie CSS</h2>
-        <div>
+        <div class="output-panel">
           <label for="css-output-theme">theme.css</label>
-          <textarea
-            id="css-output-theme"
-            rows="14"
-            cols="40"
-            readonly
-          ></textarea>
+          <div class="code-wrap">
+            <textarea
+              id="css-output-theme"
+              rows="14"
+              cols="40"
+              readonly
+            ></textarea>
+            <button
+              id="btn-copy-theme"
+              class="btn-copy-overlay"
+              aria-label="Copier theme.css"
+            >
+              Copier
+            </button>
+          </div>
         </div>
-        <div>
+        <div class="output-panel">
           <label for="css-output-tokens">theme-tokens.css</label>
-          <textarea
-            id="css-output-tokens"
-            rows="14"
-            cols="40"
-            readonly
-          ></textarea>
+          <div class="code-wrap">
+            <textarea
+              id="css-output-tokens"
+              rows="14"
+              cols="40"
+              readonly
+            ></textarea>
+            <button
+              id="btn-copy-tokens"
+              class="btn-copy-overlay"
+              aria-label="Copier theme-tokens.css"
+            >
+              Copier
+            </button>
+          </div>
         </div>
       </section>
 

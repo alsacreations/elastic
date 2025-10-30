@@ -25,6 +25,7 @@ body {
 .title-l {
   font-size: var(--text-3xl);
   font-weight: var(--font-weight-semibold);
+  color: var(--primary);
 }
 
 .title-m {
@@ -58,4 +59,46 @@ table {
 
 [id="css-outputs"] {
   margin-block: var(--spacing-m);
+}
+
+/* Output panels */
+.output-panel {
+  display: block;
+}
+
+.code-wrap {
+  position: relative;
+}
+
+.code-wrap textarea {
+  width: 100%;
+  box-sizing: border-box;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono",
+    "Courier New", monospace;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  padding: var(--spacing-s);
+  background: var(--layer-1);
+  color: var(--on-surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-s, 4px);
+  resize: vertical;
+}
+
+.btn-copy-overlay {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  background: var(--layer-2);
+  color: var(--on-surface);
+  border: 0;
+  border-radius: 3px;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.btn-copy-overlay:focus {
+  outline: 2px solid highlight;
+  outline-offset: 2px;
 }

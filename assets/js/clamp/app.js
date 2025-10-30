@@ -18,7 +18,8 @@ function init() {
   const spacingTable = document.getElementById("spacing-table");
   const spacingTbody = spacingTable.querySelector("tbody");
   const btnAdd = document.getElementById("btn-add");
-  const btnCopy = document.getElementById("btn-copy");
+  const btnCopyTheme = document.getElementById("btn-copy-theme");
+  const btnCopyTokens = document.getElementById("btn-copy-tokens");
   const themeOutput = document.getElementById("css-output-theme");
   const tokensOutput = document.getElementById("css-output-tokens");
   const status = document.getElementById("clamp-status");
@@ -95,16 +96,33 @@ function init() {
     tr.querySelector(".input-slug").focus();
   });
 
-  btnCopy.addEventListener("click", async () => {
-    try {
-      // copy combined CSS (theme + tokens)
-      const combined = `${themeOutput.value}\n${tokensOutput.value}`;
-      await navigator.clipboard.writeText(combined);
-      setStatus(status, "CSS copié dans le presse-papier");
-    } catch (err) {
-      setStatus(status, "Impossible de copier");
-    }
-  });
+  // per-output copy buttons
+  if (btnCopyTheme) {
+    btnCopyTheme.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(themeOutput.value);
+        setStatus(status, "theme.css copié");
+        const prev = btnCopyTheme.textContent;
+        btnCopyTheme.textContent = "Copié !";
+        setTimeout(() => (btnCopyTheme.textContent = prev), 900);
+      } catch (err) {
+        setStatus(status, "Impossible de copier theme.css");
+      }
+    });
+  }
+  if (btnCopyTokens) {
+    btnCopyTokens.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(tokensOutput.value);
+        setStatus(status, "theme-tokens.css copié");
+        const prev = btnCopyTokens.textContent;
+        btnCopyTokens.textContent = "Copié !";
+        setTimeout(() => (btnCopyTokens.textContent = prev), 900);
+      } catch (err) {
+        setStatus(status, "Impossible de copier theme-tokens.css");
+      }
+    });
+  }
 
   // initial generation
   generateAndRender();
