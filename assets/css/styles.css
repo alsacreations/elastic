@@ -72,12 +72,9 @@ table {
 
 .code-wrap textarea {
   width: 100%;
-  box-sizing: border-box;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono",
-    "Courier New", monospace;
-  font-size: 0.9rem;
-  line-height: 1.4;
   padding: var(--spacing-s);
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
   background: var(--layer-1);
   color: var(--on-surface);
   border: 1px solid var(--border-light);
