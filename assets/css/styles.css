@@ -38,6 +38,7 @@ body {
   font-weight: var(--font-weight-semibold);
 }
 
+/* Tableaux */
 table {
   --table-border-color: transparent;
   --table-border-collapse: separate;
@@ -50,9 +51,22 @@ table {
   & th,
   & td {
     padding: 0;
+    vertical-align: middle;
+  }
+
+  & th:last-child,
+  & td:last-child {
+    width: 2rem;
   }
 }
 
+.btn-remove {
+  width: 2rem;
+  padding: var(--spacing-4);
+  aspect-ratio: 1;
+}
+
+/* Contrôles */
 .controls {
   padding: var(--spacing-s) var(--spacing-4);
 }
@@ -61,7 +75,7 @@ table {
   margin-block: var(--spacing-m);
 }
 
-/* Output panels */
+/* Output */
 .output-panel {
   display: block;
 }
