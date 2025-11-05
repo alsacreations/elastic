@@ -45,7 +45,7 @@
   /* Couleur de sélection */
   --selection: light-dark(
     var(--color-raspberry-300),
-    var(--color-raspberry-500)
+    var(--color-raspberry-700)
   );
 
   /* États */

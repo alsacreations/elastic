@@ -14,9 +14,11 @@ const ROOT_FONT_PX = 16;
 
 function init() {
   const clampTable = document.getElementById("clamp-table");
-  const clampTbody = clampTable.querySelector("tbody");
+  const clampTbody = clampTable ? clampTable.querySelector("tbody") : null;
   const spacingTable = document.getElementById("spacing-table");
-  const spacingTbody = spacingTable.querySelector("tbody");
+  const spacingTbody = spacingTable
+    ? spacingTable.querySelector("tbody")
+    : null;
   const btnAdd = document.getElementById("btn-add");
   const btnCopyTheme = document.getElementById("btn-copy-theme");
   const btnCopyTokens = document.getElementById("btn-copy-tokens");
@@ -24,12 +26,12 @@ function init() {
   const tokensOutput = document.getElementById("css-output-tokens");
   const status = document.getElementById("clamp-status");
 
-  // delegate events
-  clampTbody.addEventListener("input", onInputChange);
-  spacingTbody.addEventListener("input", onInputChange);
+  // delegate events (only if tbody elements exist)
+  if (clampTbody) clampTbody.addEventListener("input", onInputChange);
+  if (spacingTbody) spacingTbody.addEventListener("input", onInputChange);
   // when a min/max input loses focus, if the entered value is outside the range
   // (min > max) we clamp the edited value to the other side instead of swapping
-  [clampTbody, spacingTbody].forEach((tb) => {
+  [clampTbody, spacingTbody].filter(Boolean).forEach((tb) => {
     tb.addEventListener("focusout", (e) => {
       const t = e.target;
       if (!t.classList) return;
@@ -71,7 +73,7 @@ function init() {
     });
   });
   // removal handler for both tables (event delegation)
-  [clampTbody, spacingTbody].forEach((tb) => {
+  [clampTbody, spacingTbody].filter(Boolean).forEach((tb) => {
     tb.addEventListener("click", (e) => {
       const t = e.target;
       if (t.classList.contains("btn-remove")) {
@@ -82,25 +84,30 @@ function init() {
     });
   });
 
-  btnAdd.addEventListener("click", () => {
-    const tr = createRow("new-slug", "", "");
-    clampTbody.appendChild(tr);
-    // focus the slug input
-    tr.querySelector(".input-slug").focus();
-  });
+  if (btnAdd && clampTbody) {
+    btnAdd.addEventListener("click", () => {
+      const tr = createRow("new-slug", "", "");
+      clampTbody.appendChild(tr);
+      // focus the slug input
+      tr.querySelector(".input-slug").focus();
+    });
+  }
 
   const btnAddSpacing = document.getElementById("btn-add-spacing");
-  btnAddSpacing.addEventListener("click", () => {
-    const tr = createRow("new-slug", "", "");
-    spacingTbody.appendChild(tr);
-    tr.querySelector(".input-slug").focus();
-  });
+  if (btnAddSpacing && spacingTbody) {
+    btnAddSpacing.addEventListener("click", () => {
+      const tr = createRow("new-slug", "", "");
+      spacingTbody.appendChild(tr);
+      tr.querySelector(".input-slug").focus();
+    });
+  }
 
   // per-output copy buttons
   if (btnCopyTheme) {
     btnCopyTheme.addEventListener("click", async () => {
       try {
-        await navigator.clipboard.writeText(themeOutput.value);
+        const text = themeOutput ? themeOutput.value : "";
+        await navigator.clipboard.writeText(text);
         setStatus(status, "theme.css copié");
         const prev = btnCopyTheme.textContent;
         btnCopyTheme.textContent = "Copié !";
@@ -113,7 +120,8 @@ function init() {
   if (btnCopyTokens) {
     btnCopyTokens.addEventListener("click", async () => {
       try {
-        await navigator.clipboard.writeText(tokensOutput.value);
+        const text = tokensOutput ? tokensOutput.value : "";
+        await navigator.clipboard.writeText(text);
         setStatus(status, "theme-tokens.css copié");
         const prev = btnCopyTokens.textContent;
         btnCopyTokens.textContent = "Copié !";
@@ -144,7 +152,9 @@ function init() {
 
   function generateAndRender() {
     // collect rows from both tables and concatenate
-    const rows = [...collectRows(clampTable), ...collectRows(spacingTable)];
+    const rows = [];
+    if (clampTable) rows.push(...collectRows(clampTable));
+    if (spacingTable) rows.push(...collectRows(spacingTable));
     // run validation
     const invalid = rows.some(
       (r) =>
@@ -168,11 +178,11 @@ function init() {
     });
     if (typeof result === "string") {
       // backward compatibility: if generator returns a combined string
-      themeOutput.value = result;
-      tokensOutput.value = "";
+      if (themeOutput) themeOutput.value = result;
+      if (tokensOutput) tokensOutput.value = "";
     } else {
-      themeOutput.value = result.themeCss || "";
-      tokensOutput.value = result.tokensCss || "";
+      if (themeOutput) themeOutput.value = result.themeCss || "";
+      if (tokensOutput) tokensOutput.value = result.tokensCss || "";
     }
   }
 }
