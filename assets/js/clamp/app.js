@@ -44,6 +44,9 @@ function init() {
         const minEl = tr.querySelector(".input-min");
         const maxEl = tr.querySelector(".input-max");
         if (!minEl || !maxEl) return;
+        // If one of the fields is empty the user is still typing —
+        // don't enforce min<=max yet to avoid clobbering input (UX fix).
+        if (minEl.value.trim() === "" || maxEl.value.trim() === "") return;
         const minVal = Number(minEl.value);
         const maxVal = Number(maxEl.value);
         if (
