@@ -72,7 +72,7 @@ body {
 
 /* Tableaux */
 table {
-  --table-layout: auto;
+  --table-layout: fixed;
   --table-border-color: transparent;
   --table-border-collapse: separate;
   --table-border-spacing: var(--spacing-4);
@@ -116,7 +116,7 @@ table {
 
   & th:last-child,
   & td:last-child {
-    width: 2rem;
+    width: 3rem;
     vertical-align: middle;
   }
 
