@@ -26,7 +26,12 @@
  * ----------------------------------
  */
 
+html {
+  overflow-x: hidden;
+}
+
 body {
+  overflow-x: clip;
   padding: var(--spacing-m);
   background-color: var(--surface);
   color: var(--on-surface);
