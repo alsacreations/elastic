@@ -10,8 +10,8 @@
  */
 
 :root {
-  /* Theme */
-  color-scheme: light dark;
+  /* Theme : mode clair forcé */
+  color-scheme: light;
 
   &[data-theme="light"] {
     color-scheme: light;
