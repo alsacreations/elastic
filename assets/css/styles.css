@@ -1,4 +1,19 @@
 /* ----------------------------------
+ * Polices
+ * ----------------------------------
+ */
+
+@font-face {
+  font-family: "DynaPuff Variable";
+  src:
+    url("../fonts/Dynapuff-VariableFont-opti.woff2") format("woff2")
+      tech("variations"),
+    url("../fonts/Dynapuff-VariableFont-opti.woff2") format("woff2-variations");
+  font-weight: 400 700;
+  font-display: swap;
+}
+
+/* ----------------------------------
  * Modificateurs de Layouts
  * ----------------------------------
  */
@@ -23,13 +38,15 @@ body {
 /* Titres */
 
 .title-l {
-  font-size: var(--text-3xl);
+  margin-block: var(--spacing-s);
+  font-family: "DynaPuff Variable";
+  font-size: var(--text-4xl);
   font-weight: var(--font-weight-semibold);
   color: var(--primary);
 }
 
 .title-m {
-  font-size: var(--text-m);
+  font-size: var(--text-xl);
   font-weight: var(--font-weight-semibold);
 }
 
@@ -38,32 +55,94 @@ body {
   font-weight: var(--font-weight-semibold);
 }
 
+:where(.title-l, .title-m, .title-s) span {
+  color: var(--primary);
+}
+
+/* Main */
+
+.main {
+  margin-block: var(--spacing-m);
+}
+
 /* Tableaux */
 table {
   --table-border-color: transparent;
   --table-border-collapse: separate;
   --table-border-spacing: var(--spacing-4);
+  border-spacing: 0 var(--table-border-spacing);
 
   & thead th {
-    background: none;
+    background-color: transparent;
+  }
+
+  & tr:not(thead tr) {
+    background-color: transparent;
   }
 
   & th,
   & td {
-    padding: 0;
-    vertical-align: middle;
+    padding: 0 var(--spacing-4);
+    vertical-align: bottom;
+  }
+
+  & th:nth-of-type(1),
+  & td:nth-of-type(1) {
+    width: 10rem;
+  }
+
+  & th:nth-of-type(2),
+  & td:nth-of-type(2) {
+    width: 6rem;
+  }
+
+  & th:nth-of-type(3),
+  & td:nth-of-type(3) {
+    width: auto;
+    min-width: 300px;
+  }
+
+  & th:nth-of-type(4),
+  & td:nth-of-type(4) {
+    width: 6rem;
   }
 
   & th:last-child,
   & td:last-child {
     width: 2rem;
+    vertical-align: middle;
+  }
+
+  & input {
+    padding: var(--spacing-8) var(--spacing-12);
+    background-color: var(--color-white);
   }
 }
 
+button {
+  --button-background-color: var(--layer-1);
+}
 .btn-remove {
   width: 2rem;
   padding: var(--spacing-4);
   aspect-ratio: 1;
+}
+
+.graph-visual {
+  width: 100%;
+  /* height set by JS */
+  background: transparent; /* Base background */
+  border-radius: var(--radius-s, 4px);
+  position: relative;
+}
+
+.graph-visual::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--primary-light); /* Or a specific graph color */
+  clip-path: var(--clip-path);
+  transition: clip-path 0.2s ease;
 }
 
 /* Contrôles */
