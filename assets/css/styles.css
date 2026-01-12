@@ -82,6 +82,12 @@ table {
     background-color: transparent;
   }
 
+  & tr {
+    display: grid;
+    grid-template-columns: 10rem 6rem minmax(200px, 1fr) 6rem 3rem;
+    align-items: end;
+  }
+
   & tr:not(thead tr) {
     background-color: transparent;
   }
@@ -91,7 +97,7 @@ table {
     padding: 0 var(--spacing-4);
     vertical-align: bottom;
   }
-
+  /*
   & th:nth-of-type(1),
   & td:nth-of-type(1) {
     width: 10rem;
@@ -118,7 +124,7 @@ table {
   & td:last-child {
     width: 3rem;
     vertical-align: middle;
-  }
+  } */
 
   & input {
     padding: var(--spacing-8) var(--spacing-12);
