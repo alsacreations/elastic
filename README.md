@@ -33,10 +33,9 @@ Visualisez instantanément la courbe de fluidité grâce à un graphique dynamiq
 
 ### 4. Export Express
 
-Copiez en un clic deux fichiers essentiels pour votre projet :
+Copiez en un clic le code généré :
 
-- `theme.css` : Les définitions des variables utilisant `clamp()`.
-- `theme-tokens.css` : Les tokens de design prêts à l'emploi.
+- `theme.css` : Contient à la fois les définitions des variables de base (primitives) et les tokens de design prêts à l'emploi utilisant `clamp()`.
 
 ---
 
@@ -47,8 +46,9 @@ Copiez en un clic deux fichiers essentiels pour votre projet :
    - Saisissez la valeur minimale (pour les écrans de 360px).
    - Saisissez la valeur maximale (pour les écrans de 1280px).
 2. **Visualisez** : Le graphique vous montre la progression de la valeur entre les deux bornes.
-3. **Récupérez le code** : Le CSS est généré automatiquement dans les panneaux en bas de page.
-4. **Intégrez** : Copiez le contenu de `theme.css` dans votre fichier de variables CSS et utilisez-les dans vos composants :
+3. **Récupérez le code** : Le CSS est généré automatiquement dans le panneau en bas de page.
+4. **Intégrez** : Copiez le contenu de `theme.css` dans votre projet et utilisez les variables dans vos composants :
+
    ```css
    .mon-titre {
      font-size: var(--text-l);

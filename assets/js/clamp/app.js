@@ -12,9 +12,7 @@ function init() {
   const spacingTbody = spacingTable ? spacingTable.querySelector("tbody") : null
   const btnAdd = document.getElementById("btn-add")
   const btnCopyTheme = document.getElementById("btn-copy-theme")
-  const btnCopyTokens = document.getElementById("btn-copy-tokens")
   const themeOutput = document.getElementById("css-output-theme")
-  const tokensOutput = document.getElementById("css-output-tokens")
   const status = document.getElementById("clamp-status")
 
   // delegate events (only if tbody elements exist)
@@ -112,20 +110,6 @@ function init() {
       }
     })
   }
-  if (btnCopyTokens) {
-    btnCopyTokens.addEventListener("click", async () => {
-      try {
-        const text = tokensOutput ? tokensOutput.value : ""
-        await navigator.clipboard.writeText(text)
-        setStatus(status, "theme-tokens.css copié")
-        const prev = btnCopyTokens.textContent
-        btnCopyTokens.textContent = "Copié !"
-        setTimeout(() => (btnCopyTokens.textContent = prev), 900)
-      } catch (err) {
-        setStatus(status, "Impossible de copier theme-tokens.css")
-      }
-    })
-  }
 
   // initial generation
   generateAndRender()
@@ -171,13 +155,8 @@ function init() {
       maxViewport: MAX_VIEWPORT,
       rootFontPx: ROOT_FONT_PX,
     })
-    if (typeof result === "string") {
-      // backward compatibility: if generator returns a combined string
-      if (themeOutput) themeOutput.value = result
-      if (tokensOutput) tokensOutput.value = ""
-    } else {
-      if (themeOutput) themeOutput.value = result.themeCss || ""
-      if (tokensOutput) tokensOutput.value = result.tokensCss || ""
+    if (themeOutput) {
+      themeOutput.value = result.themeCss || ""
     }
 
     // Render graphs (update visual styles)
