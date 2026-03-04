@@ -161,21 +161,21 @@ export function generateCSS(rows, options = {}) {
   let css = ":root {\n"
 
   // 1. Typographie Primitives
-  css += "  /* Typographie Primitives du projet */\n"
+  css += "  /* Typographie (Primitives) */\n"
   const fontPrimitives = getUniquePrimitives(["text"])
   if (fontPrimitives.length) css += fontPrimitives.join("\n") + "\n"
 
   // 2. Typographie Tokens
-  css += "\n  /* Typographie Tokens du projet */\n"
+  css += "\n  /* Typographie (Tokens) */\n"
   if (fontTokens.length) css += fontTokens.map(buildTokenLine).join("\n") + "\n"
 
   // 3. Espacements Primitives
-  css += "\n  /* Espacements Primitives du projet */\n"
+  css += "\n  /* Espacements (Primitives) */\n"
   const spacingPrimitives = getUniquePrimitives(["spacing", "gap"])
   if (spacingPrimitives.length) css += spacingPrimitives.join("\n") + "\n"
 
   // 4. Espacements Tokens
-  css += "\n  /* Espacements Tokens du projet */\n"
+  css += "\n  /* Espacements (Tokens) */\n"
   if (spacingTokens.length)
     css += spacingTokens.map(buildTokenLine).join("\n") + "\n"
 
