@@ -31,7 +31,7 @@ html {
 }
 
 body {
-  overflow-x: clip;
+  /* overflow-x: clip; */
   padding: var(--spacing-m);
   background-color: var(--surface);
   color: var(--on-surface);
@@ -43,11 +43,45 @@ body {
 /* Titres */
 
 .title-l {
+  z-index: 1;
+  display: inline-block;
   margin-block: var(--spacing-s);
   font-family: "DynaPuff Variable";
   font-size: var(--text-4xl);
   font-weight: var(--font-weight-semibold);
   color: var(--primary);
+  text-shadow:
+    -1px -2px 1px oklch(from var(--primary) calc(l + 0.25) c h / 0.8),
+    2px 3px 2px oklch(from var(--primary) calc(l - 0.25) c h / 0.5);
+  animation: title-elastic 0.9s ease-out;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+.title-l span {
+  position: relative;
+  display: inline-block;
+
+  &::after {
+    content: attr(data-char);
+    position: absolute;
+    inset: 0;
+    transform: scale(0.9); /* Réduit chaque lettre autour de son propre centre */
+    transform-origin: center center;
+
+    background-image: linear-gradient(
+      180deg,
+      #ffffff 0%,
+      rgba(255, 255, 255, 0.2) 60%,
+      transparent 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    mix-blend-mode: plus-lighter;
+  }
 }
 
 .title-m {
@@ -258,6 +292,28 @@ button {
     &:focus-visible {
       color: var(--color-white);
     }
+  }
+}
+
+@keyframes title-elastic {
+  0% {
+    transform: scaleY(0.7);
+  }
+
+  50% {
+    transform: scale(1.15);
+  }
+
+  70% {
+    transform: scale(0.92);
+  }
+
+  85% {
+    transform: scale(1.05);
+  }
+
+  100% {
+    transform: scale(1);
   }
 }
 
