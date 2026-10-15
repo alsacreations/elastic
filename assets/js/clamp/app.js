@@ -38,13 +38,72 @@ const DEFAULTS = {
  * Sauvegarde : URL (partage) + navigateur
  * ---------------------------------- */
 
-function encodeConfig(cfg) {
-  const json = JSON.stringify(cfg)
-  const b64 = btoa(String.fromCharCode(...new TextEncoder().encode(json)))
-  return b64.replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "")
+/*
+ * Format lisible : #t=text-s:14:14,text-m:16:18&s=spacing-xs:4:4
+ *   (+ vmin, vmax, root, f uniquement s'ils diffèrent des défauts).
+ * La largeur simulée (vw) n'est pas partagée : elle reste locale.
+ * Chaque composant est encodé individuellement : « : » et « , »
+ * restent des séparateurs fiables même si un slug en contient.
+ */
+
+const enc = encodeURIComponent
+
+function encodeRows(rows) {
+  return rows.map((r) => [r.slug, r.min, r.max].map(enc).join(":")).join(",")
 }
 
-function decodeConfig(str) {
+function decodeRows(str) {
+  if (!str) return []
+  return str.split(",").map((item) => {
+    const [slug = "", min = "", max = ""] = item
+      .split(":")
+      .map(decodeURIComponent)
+    return { slug, min, max }
+  })
+}
+
+function encodeConfig(cfg) {
+  const params = [
+    ["vmin", cfg.vmin, DEFAULTS.vmin],
+    ["vmax", cfg.vmax, DEFAULTS.vmax],
+    ["root", cfg.root, DEFAULTS.root],
+    ["f", cfg.format, DEFAULTS.format],
+  ]
+    .filter(([, value, fallback]) => value !== fallback)
+    .map(([key, value]) => `${key}=${enc(value)}`)
+  return [
+    ...params,
+    `t=${encodeRows(cfg.text)}`,
+    `s=${encodeRows(cfg.spacing)}`,
+  ].join("&")
+}
+
+function decodeConfig(hash) {
+  try {
+    const params = Object.fromEntries(
+      hash.split("&").map((pair) => {
+        const i = pair.indexOf("=")
+        return i === -1 ? [pair, ""] : [pair.slice(0, i), pair.slice(i + 1)]
+      }),
+    )
+    if ("c" in params) return decodeLegacyConfig(params.c)
+    if (!("t" in params || "s" in params)) return null
+    return sanitize({
+      vw: decodeURIComponent(params.vw ?? ""),
+      vmin: decodeURIComponent(params.vmin ?? ""),
+      vmax: decodeURIComponent(params.vmax ?? ""),
+      root: decodeURIComponent(params.root ?? ""),
+      format: decodeURIComponent(params.f ?? ""),
+      text: decodeRows(params.t),
+      spacing: decodeRows(params.s),
+    })
+  } catch {
+    return null
+  }
+}
+
+/* Anciens liens : JSON encodé en base64 (#c=…) */
+function decodeLegacyConfig(str) {
   try {
     const b64 = str.replace(/-/g, "+").replace(/_/g, "/")
     const bytes = Uint8Array.from(atob(b64), (c) => c.charCodeAt(0))
@@ -56,7 +115,7 @@ function decodeConfig(str) {
 
 function sanitize(cfg) {
   if (!cfg || typeof cfg !== "object") return null
-  const num = (v, d) => (Number.isFinite(Number(v)) ? Number(v) : d)
+  const num = (v, d) => (v !== "" && Number.isFinite(Number(v)) ? Number(v) : d)
   const rows = (list, d) =>
     Array.isArray(list)
       ? list
@@ -79,24 +138,33 @@ function sanitize(cfg) {
   }
 }
 
-function loadConfig() {
-  const hash = new URLSearchParams(location.hash.slice(1)).get("c")
-  if (hash) {
-    const fromUrl = decodeConfig(hash)
-    if (fromUrl) return fromUrl
-  }
+function loadStored() {
   try {
     const stored = localStorage.getItem(STORAGE_KEY)
-    if (stored) return sanitize(JSON.parse(stored)) ?? structuredClone(DEFAULTS)
+    if (stored) return sanitize(JSON.parse(stored))
   } catch {
     /* stockage indisponible : on garde les valeurs par défaut */
   }
-  return structuredClone(DEFAULTS)
+  return null
+}
+
+function loadConfig() {
+  const stored = loadStored()
+  const hash = location.hash.slice(1)
+  if (hash) {
+    const fromUrl = decodeConfig(hash)
+    if (fromUrl) {
+      /* La largeur simulée n'est pas dans l'URL : on reprend la locale */
+      if (stored && !hash.startsWith("c=")) fromUrl.vw = stored.vw
+      return fromUrl
+    }
+  }
+  return stored ?? structuredClone(DEFAULTS)
 }
 
 function saveConfig(cfg) {
   const encoded = encodeConfig(cfg)
-  history.replaceState(null, "", `#c=${encoded}`)
+  history.replaceState(null, "", `#${encoded}`)
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(cfg))
   } catch {
@@ -176,7 +244,10 @@ function init() {
     el.vwValue.textContent = width
     el.vwEchoes.forEach((n) => (n.textContent = width))
     const pct = (w) =>
-      Math.max(0, Math.min(100, ((w - RANGE_MIN) / (RANGE_MAX - RANGE_MIN)) * 100))
+      Math.max(
+        0,
+        Math.min(100, ((w - RANGE_MIN) / (RANGE_MAX - RANGE_MIN)) * 100),
+      )
     el.band.style.setProperty("--band-start", `${pct(vmin)}%`)
     el.band.style.setProperty("--band-end", `${pct(vmax)}%`)
     el.band.style.setProperty("--min-shift", pct(vmin) < 4 ? "0" : "-50%")
@@ -261,7 +332,11 @@ function init() {
     )
     tab.addEventListener("keydown", (e) => {
       if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return
-      const next = el.tabs[(i + (e.key === "ArrowRight" ? 1 : -1) + el.tabs.length) % el.tabs.length]
+      const next =
+        el.tabs[
+          (i + (e.key === "ArrowRight" ? 1 : -1) + el.tabs.length) %
+            el.tabs.length
+        ]
       selectTab(next.getAttribute("aria-controls").replace("panel-", ""), true)
     })
   })
