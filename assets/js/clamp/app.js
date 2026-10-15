@@ -243,15 +243,15 @@ function init() {
     // Règle
     el.vwValue.textContent = width
     el.vwEchoes.forEach((n) => (n.textContent = width))
-    const pct = (w) =>
-      Math.max(
-        0,
-        Math.min(100, ((w - RANGE_MIN) / (RANGE_MAX - RANGE_MIN)) * 100),
-      )
-    el.band.style.setProperty("--band-start", `${pct(vmin)}%`)
-    el.band.style.setProperty("--band-end", `${pct(vmax)}%`)
-    el.band.style.setProperty("--min-shift", pct(vmin) < 4 ? "0" : "-50%")
-    el.band.style.setProperty("--max-shift", pct(vmax) > 92 ? "-100%" : "-50%")
+    const ratio = (w) =>
+      Math.max(0, Math.min(1, (w - RANGE_MIN) / (RANGE_MAX - RANGE_MIN)))
+    el.band.style.setProperty("--band-start", ratio(vmin))
+    el.band.style.setProperty("--band-end", ratio(vmax))
+    el.band.style.setProperty("--min-shift", ratio(vmin) < 0.04 ? "0" : "-50%")
+    el.band.style.setProperty(
+      "--max-shift",
+      ratio(vmax) > 0.92 ? "-100%" : "-50%",
+    )
     el.rulerMin.textContent = `${vmin} min`
     el.rulerMax.textContent = `max ${vmax}`
     el.presets.forEach((b) =>

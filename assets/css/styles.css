@@ -443,9 +443,13 @@ code {
   }
 }
 
+/* Le centre du thumb parcourt la piste de thumb/2 à 100% - thumb/2 :
+ * la bande et les repères suivent la même course (fractions 0 → 1). */
 .ruler-track {
-  --band-start: 0%;
-  --band-end: 74.19%;
+  --thumb: 30px;
+  --course: calc(100% - var(--thumb));
+  --band-start: 0;
+  --band-end: 0.7419;
 
   position: relative;
 }
@@ -463,8 +467,8 @@ code {
 .ruler-band {
   position: absolute;
   top: 15px;
-  left: var(--band-start);
-  width: calc(var(--band-end) - var(--band-start));
+  left: calc(var(--thumb) / 2 + var(--course) * var(--band-start));
+  width: calc(var(--course) * (var(--band-end) - var(--band-start)));
   height: 14px;
   border-radius: 999px;
   background: var(--el-rasp);
@@ -494,7 +498,7 @@ code {
   }
 
   &::-webkit-slider-thumb {
-    width: 30px;
+    width: var(--thumb);
     height: 44px;
     border: 3px solid var(--el-ink);
     border-radius: 999px;
@@ -507,7 +511,7 @@ code {
 
   &::-moz-range-thumb {
     box-sizing: border-box;
-    width: 30px;
+    width: var(--thumb);
     height: 44px;
     border: 3px solid var(--el-ink);
     border-radius: 999px;
@@ -532,12 +536,12 @@ code {
 }
 
 [id="ruler-min"] {
-  left: var(--band-start);
+  left: calc(var(--thumb) / 2 + var(--course) * var(--band-start));
   translate: var(--min-shift, 0) 0;
 }
 
 [id="ruler-max"] {
-  left: var(--band-end);
+  left: calc(var(--thumb) / 2 + var(--course) * var(--band-end));
   translate: var(--max-shift, -50%) 0;
 }
 
