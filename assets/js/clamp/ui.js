@@ -250,7 +250,7 @@ export function renderPreview(container, rows, ctx) {
       const sample = document.createElement("span")
       sample.className = "preview-sample"
       sample.style.fontSize = `${value}px`
-      sample.textContent = "Portez ce vieux whisky au juge blond qui fume"
+      sample.textContent = "Portez ce vieux schnaps au kiwi joufflu qui mange un bretzel"
       line.appendChild(sample)
     }
     container.appendChild(line)
