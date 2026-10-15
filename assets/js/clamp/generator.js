@@ -1,7 +1,7 @@
 // generator.js
 // Exporte une fonction generateCSS(rows, options)
 // rows: [{slug: 'text-m', min: 16, max: 18}, ...]
-// options: {minViewport:360, maxViewport:1280, rootFontPx:16}
+// options: {minViewport:360, maxViewport:1280, rootFontPx:16, format:"clamp"|"function"}
 
 function toNumber(v) {
   const n = Number(v)
@@ -24,6 +24,7 @@ export function generateCSS(rows, options = {}) {
   const minViewport = Number(options.minViewport ?? 360)
   const maxViewport = Number(options.maxViewport ?? 1280)
   const rootFont = Number(options.rootFontPx ?? 16)
+  const useFunction = options.format === "function"
 
   // base variables (min/max static in rem)
   const baseVars = []
@@ -133,6 +134,8 @@ export function generateCSS(rows, options = {}) {
   const buildTokenLine = (t) => {
     if (!t.isFluid) {
       return `  --${t.slug}: var(${t.minVarName});`
+    } else if (useFunction) {
+      return `  --${t.slug}: --fluid(var(${t.minVarName}), var(${t.maxVarName}));`
     } else {
       const interceptRemStr = formatNumber(t.interceptRem, 3)
       const slopeVwStr = formatNumber(t.slopePxPerVw, 4)
@@ -158,7 +161,27 @@ export function generateCSS(rows, options = {}) {
     ).map((v) => `  ${v.name}: ${v.value};`)
   }
 
-  let css = ":root {\n"
+  let css = ""
+
+  // Fonction CSS native (@function), si demandée
+  if (useFunction) {
+    const vminRem = formatNumber(minViewport / rootFont, 3)
+    const vmaxRem = formatNumber(maxViewport / rootFont, 3)
+    css += "/* Fonction CSS native (navigateurs Chromium récents) */\n"
+    css +=
+      "@function --fluid(--min <length>, --max <length>) returns <length> {\n"
+    css += `  --vmin: ${vminRem}rem; /* ${minViewport}px */\n`
+    css += `  --vmax: ${vmaxRem}rem; /* ${maxViewport}px */\n`
+    css += "  result: clamp(\n"
+    css += "    var(--min),\n"
+    css += "    var(--min) + (var(--max) - var(--min))\n"
+    css += "      * (100vw - var(--vmin)) / (var(--vmax) - var(--vmin)),\n"
+    css += "    var(--max)\n"
+    css += "  );\n"
+    css += "}\n\n"
+  }
+
+  css += ":root {\n"
 
   // 1. Typographie Primitives
   css += "  /* Typographie (Primitives) */\n"

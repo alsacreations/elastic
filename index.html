@@ -5,10 +5,19 @@
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1, shrink-to-fit=no, viewport-fit=cover" />
-    <title>Elastic, générateur d'espacements fluides</title>
+    <title>Elastic, générateur de typographies et d'espacements fluides</title>
+    <meta
+      name="description"
+      content="Elastic génère des tailles de police et des espacements fluides en CSS avec clamp() ou @function, sans media queries." />
     <link
       rel="preload"
       href="assets/fonts/Dynapuff-VariableFont-opti.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin="anonymous" />
+    <link
+      rel="preload"
+      href="assets/fonts/RethinkSans-Variable.woff2"
       as="font"
       type="font/woff2"
       crossorigin="anonymous" />
@@ -25,439 +34,420 @@
       rel="stylesheet"
       href="assets/css/app.css" />
   </head>
-  <body data-layout="boxed">
-    <header
-      class="header"
-      role="banner">
-      <h1 class="title-l"><span data-char="E">E</span><span data-char="l">l</span><span data-char="a">a</span><span data-char="s">s</span><span data-char="t">t</span><span data-char="i">i</span><span data-char="c">c</span></h1>
-    </header>
-    <p class="lead">
-      <strong>Elastic</strong> est un petit utilitaire pour générer des tailles
-      de police et des espacements fluides, inspiré par
-      <a
-        href="https://utopia.fyi/"
-        target="_blank"
-        rel="noopener"
-        >Utopia</a
-      >.
-    </p>
-    <p>
-      Indiquez le nom de votre variable, sa valeur minimale et maximale. Elastic
-      vous fournira le code CSS nécessaire pour rendre vos polices et
-      espacements fluides (valeurs en rem avec <code>clamp()</code> entre 360px
-      et 1280px).
-    </p>
-
-    <main
-      class="main"
-      role="main">
-      <div data-layout="stack">
-        <section
-          id="clamp-app"
-          aria-labelledby="clamp-app-title">
-          <h2
-            id="clamp-app-title"
-            class="title-m">
-            <span>Polices</span> fluides
-          </h2>
-
-          <p
-            class="visually-hidden"
-            id="clamp-desc">
-            Tableau éditable : colonnes slug, min (px), max (px). Le CSS généré
-            apparaît dans la zone de sortie et est mis à jour automatiquement.
-          </p>
-
-          <div
-            role="region"
-            aria-labelledby="clamp-app-title">
-            <div class="table-responsive">
-              <table
-                id="clamp-table"
-                class="table"
-                aria-describedby="clamp-desc">
-                <caption class="visually-hidden">
-                  Liste des variables à générer
-                </caption>
-                <thead>
-                  <tr>
-                    <th scope="col">variable</th>
-                    <th scope="col">min&nbsp;(px)</th>
-                    <th scope="col">Aperçu</th>
-                    <th scope="col">max&nbsp;(px)</th>
-                    <th scope="col">
-                      <span class="visually-hidden">actions</span>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>
-                      <input
-                        type="text"
-                        class="input-slug"
-                        value="text-s"
-                        aria-label="slug" />
-                    </td>
-                    <td>
-                      <input
-                        type="number"
-                        class="input-min"
-                        value="14"
-                        aria-label="min en pixels" />
-                    </td>
-                    <td>
-                      <div class="graph-visual"></div>
-                    </td>
-                    <td>
-                      <input
-                        type="number"
-                        class="input-max"
-                        value="14"
-                        aria-label="max en pixels" />
-                    </td>
-                    <td>
-                      <button
-                        type="button"
-                        class="btn-remove"
-                        aria-label="Supprimer la ligne">
-                        ✕
-                      </button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <input
-                        type="text"
-                        class="input-slug"
-                        value="text-m"
-                        aria-label="slug" />
-                    </td>
-                    <td>
-                      <input
-                        type="number"
-                        class="input-min"
-                        value="16"
-                        aria-label="min en pixels" />
-                    </td>
-                    <td>
-                      <div class="graph-visual"></div>
-                    </td>
-                    <td>
-                      <input
-                        type="number"
-                        class="input-max"
-                        value="18"
-                        aria-label="max en pixels" />
-                    </td>
-                    <td>
-                      <button
-                        type="button"
-                        class="btn-remove"
-                        aria-label="Supprimer la ligne">
-                        ✕
-                      </button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <input
-                        type="text"
-                        class="input-slug"
-                        value="text-l"
-                        aria-label="slug" />
-                    </td>
-                    <td>
-                      <input
-                        type="number"
-                        class="input-min"
-                        value="18"
-                        aria-label="min en pixels" />
-                    </td>
-                    <td>
-                      <div class="graph-visual"></div>
-                    </td>
-                    <td>
-                      <input
-                        type="number"
-                        class="input-max"
-                        value="20"
-                        aria-label="max en pixels" />
-                    </td>
-                    <td>
-                      <button
-                        type="button"
-                        class="btn-remove"
-                        aria-label="Supprimer la ligne">
-                        ✕
-                      </button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-
-            <div
-              data-layout="cluster"
-              data-gap="s"
-              class="controls">
-              <button
-                id="btn-add"
-                type="button">
-                Ajouter une ligne
-              </button>
-            </div>
-
-            <div
-              id="clamp-status"
-              class="visually-hidden"
-              aria-live="polite"></div>
-          </div>
-        </section>
-
-        <section
-          id="spacing-app"
-          aria-labelledby="spacing-app-title">
-          <h2
-            id="spacing-app-title"
-            class="title-m">
-            <span>Espacements</span> fluides
-          </h2>
-
-          <p
-            class="visually-hidden"
-            id="spacing-desc">
-            Tableau éditable : colonnes slug, min (px), max (px) pour les
-            espacements.
-          </p>
-
-          <div
-            role="region"
-            aria-labelledby="spacing-app-title">
-            <div class="table-responsive">
-              <table
-                id="spacing-table"
-                class="table"
-                aria-describedby="spacing-desc">
-                <caption class="visually-hidden">
-                  Liste des espacements à générer
-                </caption>
-                <thead>
-                  <tr>
-                    <th scope="col">variable</th>
-                    <th scope="col">min&nbsp;(px)</th>
-                    <th scope="col">Aperçu</th>
-                    <th scope="col">max&nbsp;(px)</th>
-                    <th scope="col">
-                      <span class="visually-hidden">actions</span>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>
-                      <input
-                        type="text"
-                        class="input-slug"
-                        value="spacing-xs"
-                        aria-label="slug" />
-                    </td>
-                    <td>
-                      <input
-                        type="number"
-                        class="input-min"
-                        value="4"
-                        aria-label="min en pixels" />
-                    </td>
-                    <td>
-                      <div class="graph-visual"></div>
-                    </td>
-                    <td>
-                      <input
-                        type="number"
-                        class="input-max"
-                        value="4"
-                        aria-label="max en pixels" />
-                    </td>
-                    <td>
-                      <button
-                        type="button"
-                        class="btn-remove"
-                        aria-label="Supprimer la ligne">
-                        ✕
-                      </button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <input
-                        type="text"
-                        class="input-slug"
-                        value="spacing-s"
-                        aria-label="slug" />
-                    </td>
-                    <td>
-                      <input
-                        type="number"
-                        class="input-min"
-                        value="8"
-                        aria-label="min en pixels" />
-                    </td>
-                    <td>
-                      <div class="graph-visual"></div>
-                    </td>
-                    <td>
-                      <input
-                        type="number"
-                        class="input-max"
-                        value="16"
-                        aria-label="max en pixels" />
-                    </td>
-                    <td>
-                      <button
-                        type="button"
-                        class="btn-remove"
-                        aria-label="Supprimer la ligne">
-                        ✕
-                      </button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <input
-                        type="text"
-                        class="input-slug"
-                        value="spacing-m"
-                        aria-label="slug" />
-                    </td>
-                    <td>
-                      <input
-                        type="number"
-                        class="input-min"
-                        value="16"
-                        aria-label="min en pixels" />
-                    </td>
-                    <td>
-                      <div class="graph-visual"></div>
-                    </td>
-                    <td>
-                      <input
-                        type="number"
-                        class="input-max"
-                        value="32"
-                        aria-label="max en pixels" />
-                    </td>
-                    <td>
-                      <button
-                        type="button"
-                        class="btn-remove"
-                        aria-label="Supprimer la ligne">
-                        ✕
-                      </button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-
-            <div
-              data-layout="cluster"
-              class="controls">
-              <button
-                id="btn-add-spacing"
-                type="button">
-                Ajouter une ligne
-              </button>
-            </div>
-          </div>
-        </section>
-      </div>
+  <body>
+    <div class="app">
+      <header class="app-header">
+        <h1
+          class="logo"
+          aria-label="Elastic"><span data-char="E">E</span><span data-char="l">l</span><span data-char="a">a</span><span data-char="s">s</span><span data-char="t">t</span><span data-char="i">i</span><span data-char="c">c</span></h1>
+        <p class="tagline">
+          Des tailles de texte et des espacements qui
+          <strong>s'étirent</strong> avec l'écran. Sans media queries.
+        </p>
+        <nav
+          class="header-actions"
+          aria-label="Actions du projet">
+          <button
+            id="btn-reset"
+            class="btn"
+            type="button">
+            <svg
+              class="icon"
+              viewBox="0 0 24 24"
+              aria-hidden="true">
+              <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+              <path d="M3 3v5h5" />
+            </svg>
+            Réinitialiser
+          </button>
+          <button
+            id="btn-share"
+            class="btn"
+            type="button">
+            <svg
+              class="icon"
+              viewBox="0 0 24 24"
+              aria-hidden="true">
+              <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+              <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+            </svg>
+            <span class="btn-label">Partager</span>
+          </button>
+        </nav>
+      </header>
 
       <section
-        id="css-outputs"
-        aria-labelledby="css-outputs-title">
-        <h2
-          id="css-outputs-title"
-          class="visually-hidden">
-          Sortie CSS
-        </h2>
-        <div class="output-panel">
-          <label for="css-output-theme">theme.css</label>
-          <div class="code-wrap">
-            <textarea
-              id="css-output-theme"
-              rows="18"
-              cols="40"
-              readonly></textarea>
+        class="card ruler"
+        aria-labelledby="ruler-title">
+        <div class="ruler-head">
+          <h2
+            id="ruler-title"
+            class="card-title">
+            Étirez l'écran
+          </h2>
+          <output
+            id="vw-output"
+            class="ruler-value"
+            for="vw-range"
+            ><span id="vw-value">768</span><small> px</small></output
+          >
+          <div
+            class="presets"
+            role="group"
+            aria-label="Largeurs prédéfinies">
             <button
-              id="btn-copy-theme"
-              class="btn-copy-overlay"
-              aria-label="Copier theme.css">
-              Copier
+              class="chip"
+              type="button"
+              data-width="375"
+              aria-pressed="false">
+              Mobile <span>375</span>
             </button>
+            <button
+              class="chip"
+              type="button"
+              data-width="768"
+              aria-pressed="true">
+              Tablette <span>768</span>
+            </button>
+            <button
+              class="chip"
+              type="button"
+              data-width="1280"
+              aria-pressed="false">
+              Portable <span>1280</span>
+            </button>
+            <button
+              class="chip"
+              type="button"
+              data-width="1440"
+              aria-pressed="false">
+              Bureau <span>1440</span>
+            </button>
+          </div>
+        </div>
+        <div class="ruler-track">
+          <div
+            class="ruler-rail"
+            aria-hidden="true"></div>
+          <div
+            class="ruler-band"
+            id="ruler-band"
+            aria-hidden="true"></div>
+          <input
+            id="vw-range"
+            class="ruler-range"
+            type="range"
+            min="360"
+            max="1600"
+            step="1"
+            value="768"
+            aria-label="Largeur d'écran simulée, en pixels" />
+          <div
+            class="ruler-labels"
+            aria-hidden="true">
+            <span
+              id="ruler-min"
+              class="ruler-mark"
+              >360 min</span
+            >
+            <span
+              id="ruler-max"
+              class="ruler-mark"
+              >max 1280</span
+            >
+            <span class="ruler-end">1600</span>
           </div>
         </div>
       </section>
 
-    </main>
-
-    <footer class="footer" role="contentinfo">
-      <div class="footer-alsa">
-        <p>Elastic est un projet <i>fifoo</i> conçu avec ❤️ par</p>
-        <a class="logo-link" href="https://www.alsacreations.fr/"><svg
-            role="img"
-            aria-labelledby="title-alsacreations-footer"
-            class="logo-alsacreations"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 241 45"
-            width="241"
-            height="45"
-          >
-            <title id="title-alsacreations-footer">Alsacreations</title>
-            <g class="logo-alsacreations-pepins-group">
-              <path
-                class="logo-alsacreations-pepins-outer"
-                d="M232 18.5c2.2-1.1 3.5-2.4 4-4 .6-1.9-.2-4-2.2-6.2-1.7-2-3.5-2.7-5.3-2.2-1.5.4-2.9 1.7-4.2 3.7-1.1 1.7-2 3.8-2.6 5.9-.6 2.1-.7 3.6-.4 4.5.9.3 2.3.3 4.5 0a14 14 0 0 0 6.2-1.7zm-12-9.1c1.1-2.2 1.4-4 .8-5.5-.7-1.9-2.5-3.1-5.4-3.7-2.5-.6-4.4-.1-5.5 1.4-.9 1.2-1.4 3-1.2 5.5.1 2.1.6 4.2 1.5 6.4.8 2 1.5 3.3 2.3 3.9a20 20 0 0 0 7.5-8zm13.6 24.3c2.4.4 4.2.1 5.5-.9 1.5-1.2 2.1-3.3 1.8-6.3-.2-2.6-1.3-4.1-3-4.8-1.5-.5-3.3-.3-5.6.6-1.9.8-3.8 1.9-5.5 3.3-1.7 1.4-2.7 2.5-2.9 3.5.6.7 1.7 1.6 3.6 2.6 2.1 1.1 4.1 1.8 6.1 2z"
-              ></path>
-              <path
-                class="logo-alsacreations-pepins-inner"
-                d="M214.4 7.8c-.9-.2-1.5 0-1.9.5-.3.4-.5 1.1-.4 1.9.1.7.2 1.5.5 2.2.2.7.6 1.2.8 1.4l1.2-.9c.6-.6 1.1-1.2 1.4-1.8.4-.7.5-1.4.3-1.9-.3-.7-1-1.2-1.9-1.4zm14 6.1c-.6-.7-1.2-.9-1.9-.7-.5.1-1 .6-1.5 1.3-.4.6-.7 1.3-.9 2.1-.2.7-.2 1.2-.1 1.5h1.5c.8-.1 1.5-.3 2.2-.7.7-.4 1.2-.8 1.4-1.4.2-.6 0-1.4-.7-2.1zm4.9 14c-.1-.9-.4-1.5-1.1-1.7-.5-.2-1.2-.1-2 .2-.7.3-1.4.7-1.9 1.2-.6.5-.9.9-1.1 1.2.2.2.6.6 1.3.9.7.4 1.5.6 2.2.7.8.1 1.5 0 1.9-.3.6-.5.9-1.2.7-2.2z"
-              ></path>
-            </g>
-            <path
-              class="logo-alsacreations-alsa"
-              d="m1.5 25.1-.1-.6.1-.6a12.7 12.7 0 0 1 9-2.2c3.8.2 5 2.6 5 6.7v2l-.1 5.3-.1 4s-.1 2.1 1.3 1.9l-.1 2c-.4.6-1.5 1.3-2.9 1.3a4 4 0 0 1-2.8-1.4l-1.1.7c-1.1.6-2.3.7-3.6.7-3.1 0-6.1-2-6.1-6.3 0-5.7 5.3-7.4 8.2-7.7l1.4-.1 1.1.1v-2.3c0-2-.2-3-1.7-3s-3.3.7-4.7 1.2c-.5.2-1.1.4-1.7.4-.8-.9-1-1.7-1.1-2.1zm9.1 12V34h-.5l-1.5.1h.1c-2 .4-3.8 1.3-3.8 4 0 2.2.9 3 2 3h.3c1.2 0 2.7-.6 3.2-1.4l-.1.1.1-.6c.2-.5.2-1.2.2-2.1zm16.2 4.4-.1 2c-.5.7-1.5 1.3-2.9 1.3-.7 0-1.4-.3-1.9-.7a3 3 0 0 1-1.4-2.5v-24l-.1-5.2c.6-1.3 2.3-1.5 4.6-1.5.3 1.1.3 2.2.3 4.6v24.1c.1.1 0 2.2 1.5 1.9zm11.6-19.9c3 .2 4.4 1.5 4.6 2.1 0 .6-.4 1.7-.9 2.4l-.9-.2-1.5-.4c-.7-.3-1.4-.4-2.1-.4-1.7 0-2.7.9-2.7 2.2 0 .7.3 1.4 1.3 2.2l2 1.4 2.7 2c2 1.7 2.9 3.3 2.9 5.3 0 4.5-3.6 6.7-8.2 6.7-3 0-5.7-.9-6.2-2.3 0-.7.4-1.8.9-2.5h.5c.4 0 .9.1 1.4.4v-.1c1 .4 2.2.7 3.3.7l.9-.1c1.4-.1 2.3-1.1 2.3-2.5 0-1.1-.5-1.9-1.8-2.8l-.6-.4c-1.1-.7-2.3-1.7-3.2-2.5l-1.3-.8c-1.5-1.5-2.2-2.9-2.2-4.6 0-3.7 3-5.9 7.5-5.9l1.3.1zm8.9 3.5-.1-.6.1-.6a12.7 12.7 0 0 1 9-2.2c3.8.2 5 2.6 5 6.7v2l-.1 5.3-.1 4s-.1 2.1 1.3 1.9l-.1 2c-.4.6-1.5 1.3-2.9 1.3a4 4 0 0 1-2.8-1.4l-1.1.7c-1.1.6-2.3.7-3.6.7-3.2 0-6.2-2-6.2-6.4 0-5.7 5.3-7.4 8.2-7.7l1.4-.1 1.1.1v-2.3c0-2-.2-3-1.7-3s-3.3.7-4.7 1.2c-.5.2-1.1.4-1.7.4-.8-.8-.9-1.6-1-2zm9.1 12V34h-.5l-1.5.1h.1c-2 .4-3.8 1.3-3.8 4 0 2.2.9 3 2 3h.3c1.2 0 2.7-.6 3.2-1.4l-.1.1.1-.6c.2-.5.2-1.2.2-2.1z"
-            ></path>
-            <path
-              class="logo-alsacreations-creations"
-              d="M80.8 23.6c0 .6-.3 1.7-.7 2.5h-.6a4 4 0 0 1-1.5-.3 7 7 0 0 0-2.5-.6 1 1 0 0 0-.5.1c-2.7.2-4.6 2.7-4.6 8.1 0 6.5 2.7 7.9 5.4 7.9 1.5 0 3.1-.5 4.3-1.1l.4 1.8c-.1.7-.6 1.5-1.2 2-.9.7-2.5 1.1-4.4 1.1-5.2 0-9.8-1.9-9.8-11.4 0-4.9 1.7-8 3.5-9.8a9.8 9.8 0 0 1 6.7-2.3c3-.1 5.3 1.3 5.5 2zm8.3 3.5V42c0 .7-.1 1.3-.5 1.9-.7.6-1.5.6-4.5.6l.1-9.3.1-7.9c0-1.5-.3-2.6-.6-3.5.4-.4 1-.7 2-1.2l.7-.1c1 0 1.4.3 1.7.9.9-.6 1.9-1.1 2.8-1.4.8-.3 1.9-.5 2.7-.4 1.4.1 2.2.6 2.3 1.3 0 .7-.2 2-.9 3l-.7.1-1.4-.1-.6-.1c-1.3.1-2.3.4-3.2 1.3zM113 39.7c.3.9.4 1.9.5 2.3-.1 1-1.6 2-3 2.5h.1c-.7.2-2.2.5-3.6.5-2.3 0-4.8-.4-6.6-2.3-1.7-1.8-2.6-4.8-2.6-8.6 0-9.2 4-12.5 9.3-12.5 4.5 0 6.8 2.7 7.2 6.7l.1 2.3-.2 2.8c-.6.5-2.3 1.1-3.6 1.3-1.5.2-3.8.3-6.1.3h-1.7c.1 4.7 2 6.2 5 6.2 1.6-.2 3.4-.5 5.2-1.5zM106.2 25c-1.7.2-3.3 2.2-3.6 6.4h1.3l4.5-.1.7-.2.2-1.4-.1-.5v-.5c-.2-2.5-1.1-3.7-2.8-3.7h-.2zm11.7.1-.1-.6.1-.6a12.7 12.7 0 0 1 9-2.2c3.8.2 5 2.6 5 6.7v2l-.1 5.3-.1 4s-.1 2.1 1.3 1.9l-.1 2c-.4.6-1.5 1.3-2.9 1.3a4 4 0 0 1-2.8-1.4l-1.1.7c-1.1.6-2.3.7-3.6.7-3.2 0-6.2-2-6.2-6.4 0-5.7 5.3-7.4 8.2-7.7l1.4-.1 1.1.1v-2.3c0-2-.2-3-1.7-3s-3.3.7-4.7 1.2c-.5.2-1.1.4-1.7.4-.7-.8-.9-1.6-1-2zm9.1 12V34h-.5l-1.5.1h.1c-2 .4-3.8 1.3-3.8 4 0 2.2.9 3 2 3h.3c1.2 0 2.7-.6 3.2-1.4l-.1.1.1-.6c.2-.5.2-1.2.2-2.1zm21.6 3.4.1 1.1-.1 1.3c-.1.3-.3.6-.7.9a8.7 8.7 0 0 1-4.4 1.1c-4.7 0-5.6-4.2-5.6-8V25.8a6.3 6.3 0 0 1-2.8-.7c0-1.4.1-1.4.4-1.7.7-.5 1.4-.7 2-.9l.7-.1.2-4.1c.4-1.1 1.6-2 4.5-2.2v.7l-.1 5.3h6c-.1 2.7-.5 3.2-1.5 3.5l-1.2.1-3.3.1-.1 6.1.1 3v2.2c.2 2.5.5 4.2 2 4.2.6.1 2.5-.6 2.8-.9l1 .1zm6.3-29c2.2 0 2.7.9 2.6 2.7-.1 1.8-.6 3-2.8 3-1.9 0-2.7-.9-2.7-2.9 0-1.8 1-2.8 2.9-2.8zm1.9 10.6c.4.7.4 1.4.4 3.4v15.8c0 1.1-.2 1.9-.7 2.6-.3.5-1.1.5-4.4.6v-3.8l.1-4.3v-8.2l-.1-4.8c.6-1.2 2.2-1.3 4.3-1.3h.4zm13.6 22.8c-6 0-9.4-3.5-9.4-11.7 0-8.1 4-11.8 9.5-11.8 6.2 0 9.3 4 9.3 11.5 0 8-4 12-9.4 12zm.1-3.4c2.2 0 4.1-2.1 4.1-8.3 0-5.9-1.7-8.1-4.2-8.1-2.2 0-4.2 2.2-4.2 8 0 6.3 1.8 8.4 4.3 8.4zm18-14.2.1-.1v14.5c0 1.1-.1 1.6-.6 2.3-.7.6-1.2.6-3.3.6h-1.2l.1-9.3v-7.9c0-1.5-.2-2.6-.5-3.5.3-.4.9-.7 2-1.2l.7-.1c.9 0 1.4.4 1.7 1a10 10 0 0 1 5.8-1.9c5.9 0 7 3 7 8.3v7l.1 6.7c-.6.6-1.5.7-4.6.7a4 4 0 0 1-.5-2.1V30c0-3.4-.8-4.6-3.2-4.6-1.4 0-2.7.8-3.6 1.9zm24.7-5.7c3 .2 4.4 1.5 4.6 2.1 0 .6-.4 1.7-.9 2.4l-.9-.2-1.5-.4c-.7-.3-1.4-.4-2.1-.4-1.7 0-2.7.9-2.7 2.2 0 .7.3 1.4 1.3 2.2l2 1.4 2.7 2c2 1.7 2.9 3.3 2.9 5.3 0 4.5-3.6 6.7-8.2 6.7-3 0-5.7-.9-6.2-2.3 0-.7.4-1.8.9-2.5h.5c.4 0 .9.1 1.4.4v-.1c1 .4 2.2.7 3.3.7l.9-.1c1.4-.1 2.3-1.1 2.3-2.5 0-1.1-.5-1.9-1.8-2.8l-.6-.4c-1.1-.7-2.3-1.7-3.2-2.5l-1.2-.9c-1.5-1.5-2.2-2.9-2.2-4.6 0-3.7 3-5.9 7.5-5.9l1.2.2zm-110.1-3.4s.5-3.2 1.9-5.1c1.5-2.1 3.9-3.3 5.5-1.3 1.2 1.4.9 2.9-1.6 4.5-3.1 1.9-5.8 1.9-5.8 1.9z"
-            ></path>
-          </svg>
-        </a>
-
-        <p>
-              <a
-                href="https://github.com/alsacreations/elastic"
-                class="btn btn-github"
-                title="voir le repo sur GitHub">
-                GitHub
+      <div class="workspace">
+        <main class="workspace-main">
+          <section
+            class="card vars"
+            aria-label="Variables">
+            <div class="vars-toolbar">
+              <div
+                class="tabs"
+                role="tablist"
+                aria-label="Type de variables">
+                <button
+                  id="tab-text"
+                  class="tab"
+                  role="tab"
+                  type="button"
+                  aria-selected="true"
+                  aria-controls="panel-text">
+                  Typographie <span
+                    class="count"
+                    id="count-text"
+                    >3</span
+                  >
+                </button>
+                <button
+                  id="tab-spacing"
+                  class="tab"
+                  role="tab"
+                  type="button"
+                  aria-selected="false"
+                  aria-controls="panel-spacing"
+                  tabindex="-1">
+                  Espacements <span
+                    class="count"
+                    id="count-spacing"
+                    >3</span
+                  >
+                </button>
+              </div>
+              <button
+                id="btn-add"
+                class="btn"
+                type="button">
                 <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 1024 1024"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg">
-                  <path
-                    fill-rule="evenodd"
-                    clip-rule="evenodd"
-                    d="M8 0C3.58 0 0 3.58 0 8C0 11.54 2.29 14.53 5.47 15.59C5.87 15.66 6.02 15.42 6.02 15.21C6.02 15.02 6.01 14.39 6.01 13.72C4 14.09 3.48 13.23 3.32 12.78C3.23 12.55 2.84 11.84 2.5 11.65C2.22 11.5 1.82 11.13 2.49 11.12C3.12 11.11 3.57 11.7 3.72 11.94C4.44 13.15 5.59 12.81 6.05 12.6C6.12 12.08 6.33 11.73 6.56 11.53C4.78 11.33 2.92 10.64 2.92 7.58C2.92 6.71 3.23 5.99 3.74 5.43C3.66 5.23 3.38 4.41 3.82 3.31C3.82 3.31 4.49 3.1 6.02 4.13C6.66 3.95 7.34 3.86 8.02 3.86C8.7 3.86 9.38 3.95 10.02 4.13C11.55 3.09 12.22 3.31 12.22 3.31C12.66 4.41 12.38 5.23 12.3 5.43C12.81 5.99 13.12 6.7 13.12 7.58C13.12 10.65 11.25 11.33 9.47 11.53C9.76 11.78 10.01 12.26 10.01 13.01C10.01 14.08 10 14.94 10 15.21C10 15.42 10.15 15.67 10.55 15.59C13.71 14.53 16 11.53 16 8C16 3.58 12.42 0 8 0Z"
-                    transform="scale(64)"
-                    fill="#ffff"></path>
+                  class="icon"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true">
+                  <path d="M5 12h14" />
+                  <path d="M12 5v14" />
                 </svg>
-              </a>
-            </p>
+                Ajouter
+              </button>
+            </div>
+
+            <div
+              id="panel-text"
+              role="tabpanel"
+              aria-labelledby="tab-text">
+              <div class="table-scroll">
+                <table
+                  id="clamp-table"
+                  class="vars-table">
+                  <caption class="visually-hidden">
+                    Typographies fluides : nom, valeur minimale, courbe, valeur
+                    maximale, valeur simulée
+                  </caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">Variable</th>
+                      <th scope="col">Min (px)</th>
+                      <th scope="col">Courbe</th>
+                      <th scope="col">Max (px)</th>
+                      <th
+                        scope="col"
+                        class="col-current">
+                        à <span class="vw-echo">768</span> px
+                      </th>
+                      <th scope="col">
+                        <span class="visually-hidden">Actions</span>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+
+            <div
+              id="panel-spacing"
+              role="tabpanel"
+              aria-labelledby="tab-spacing"
+              hidden>
+              <div class="table-scroll">
+                <table
+                  id="spacing-table"
+                  class="vars-table">
+                  <caption class="visually-hidden">
+                    Espacements fluides : nom, valeur minimale, courbe, valeur
+                    maximale, valeur simulée
+                  </caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">Variable</th>
+                      <th scope="col">Min (px)</th>
+                      <th scope="col">Courbe</th>
+                      <th scope="col">Max (px)</th>
+                      <th
+                        scope="col"
+                        class="col-current">
+                        à <span class="vw-echo">768</span> px
+                      </th>
+                      <th scope="col">
+                        <span class="visually-hidden">Actions</span>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+
+            <div
+              id="a11y-note"
+              class="note"
+              role="note"
+              hidden>
+              <svg
+                class="icon"
+                viewBox="0 0 24 24"
+                aria-hidden="true">
+                <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3" />
+                <path d="M12 9v4" />
+                <path d="M12 17h.01" />
+              </svg>
+              <p>
+                <strong>Accessibilité :</strong> au-delà de ×2,5 entre min et
+                max, un texte en <code>vw</code> risque de ne pas doubler au
+                zoom 200 % (WCAG 1.4.4). Réduisez l'écart entre les deux
+                valeurs.
+              </p>
+            </div>
+          </section>
+
+          <section
+            class="card preview"
+            aria-labelledby="preview-title">
+            <div class="preview-head">
+              <h2
+                id="preview-title"
+                class="card-title">
+                Aperçu à <span class="vw-echo">768</span> px
+              </h2>
+              <p class="hint">Bougez la règle : l'échelle s'étire.</p>
+            </div>
+            <div
+              id="preview-list"
+              class="preview-list"></div>
+          </section>
+        </main>
+
+        <aside
+          class="workspace-side"
+          aria-label="Réglages et code généré">
+          <section
+            class="card settings"
+            aria-labelledby="settings-title">
+            <h2
+              id="settings-title"
+              class="card-title">
+              Réglages
+            </h2>
+            <div class="settings-grid">
+              <label class="field">
+                <span class="field-label">Écran min (px)</span>
+                <input
+                  id="opt-vmin"
+                  class="input"
+                  type="number"
+                  min="200"
+                  value="360" />
+              </label>
+              <label class="field">
+                <span class="field-label">Écran max (px)</span>
+                <input
+                  id="opt-vmax"
+                  class="input"
+                  type="number"
+                  min="200"
+                  value="1280" />
+              </label>
+              <label class="field">
+                <span class="field-label">Taille racine (px)</span>
+                <input
+                  id="opt-root"
+                  class="input"
+                  type="number"
+                  min="1"
+                  value="16" />
+              </label>
+            </div>
+            <fieldset class="format">
+              <legend class="field-label">Format de sortie</legend>
+              <div class="format-options">
+                <button
+                  class="seg"
+                  type="button"
+                  data-format="clamp"
+                  aria-pressed="true">
+                  <code>clamp()</code>
+                  <span>Fonctionne partout</span>
+                </button>
+                <button
+                  class="seg"
+                  type="button"
+                  data-format="function"
+                  aria-pressed="false">
+                  <code>--fluid()</code>
+                  <span>@function native, lisible · support limité</span>
+                </button>
+              </div>
+            </fieldset>
+          </section>
+
+          <section
+            class="code-card"
+            aria-labelledby="code-title">
+            <div class="code-head">
+              <h2
+                id="code-title"
+                class="code-title">
+                theme.css
+              </h2>
+              <span
+                id="code-lines"
+                class="code-meta"></span>
+              <button
+                id="btn-copy-theme"
+                class="btn btn-primary"
+                type="button">
+                <svg
+                  class="icon"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true">
+                  <rect
+                    width="14"
+                    height="14"
+                    x="8"
+                    y="8"
+                    rx="2"
+                    ry="2" />
+                  <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+                </svg>
+                <span class="btn-label">Copier</span>
+              </button>
+            </div>
+            <pre
+              class="code-scroll"
+              tabindex="0"
+              aria-label="Code CSS généré"><code id="css-output-theme"></code></pre>
+          </section>
+        </aside>
       </div>
-    </footer>
+
+      <div
+        id="clamp-status"
+        class="visually-hidden"
+        aria-live="polite"></div>
+
+      <footer class="app-footer">
+        <p>
+          Un projet <i>fifoo</i> par
+          <a href="https://www.alsacreations.fr/">Alsacréations</a> · inspiré
+          par <a href="https://utopia.fyi/">Utopia</a>
+        </p>
+        <p>Configuration gardée dans l'URL et le navigateur</p>
+        <a
+          class="btn"
+          href="https://github.com/alsacreations/elastic">
+          <svg
+            class="icon"
+            viewBox="0 0 24 24"
+            aria-hidden="true">
+            <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
+            <path d="M9 18c-4.51 2-5-2-7-2" />
+          </svg>
+          Voir le dépôt sur GitHub
+        </a>
+      </footer>
+    </div>
 
     <script
       type="module"
