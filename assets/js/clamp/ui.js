@@ -186,8 +186,10 @@ export function updateRowVisual(tr, ctx) {
 
   const x = (w) =>
     Math.max(0, Math.min(200, ((w - RANGE_MIN) / (RANGE_MAX - RANGE_MIN)) * 200))
-  const top = Math.max(min || 0, max || 0, 1)
-  const y = (v) => 36 - (v / top) * 30
+  // Échelle resserrée sur [min, max] : la pente s'arrête nettement à vmax
+  const low = Math.min(min, max)
+  const high = Math.max(min, max)
+  const y = (v) => (high === low ? 6 : 36 - ((v - low) / (high - low)) * 30)
 
   const svg = q(".curve", tr)
   const strong = q(".current strong", tr)
