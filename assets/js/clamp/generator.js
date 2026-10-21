@@ -168,13 +168,12 @@ export function generateCSS(rows, options = {}) {
 
   // Fonction CSS native (@function), si demandée
   if (useFunction) {
-    const vminRem = formatNumber(minViewport / rootFont, 3)
-    const vmaxRem = formatNumber(maxViewport / rootFont, 3)
+    // Bornes d'écran en px : au zoom texte, seules min/max (rem) suivent
     css += "/* Fonction CSS native (navigateurs Chromium récents) */\n"
     css +=
       "@function --fluid(--min <length>, --max <length>) returns <length> {\n"
-    css += `  --vmin: ${vminRem}rem; /* ${minViewport}px */\n`
-    css += `  --vmax: ${vmaxRem}rem; /* ${maxViewport}px */\n`
+    css += `  --vmin: ${minViewport}px;\n`
+    css += `  --vmax: ${maxViewport}px;\n`
     css += "  result: clamp(\n"
     css += "    var(--min),\n"
     css += "    var(--min) + (var(--max) - var(--min))\n"
@@ -188,11 +187,10 @@ export function generateCSS(rows, options = {}) {
 
   // Progression du viewport (progress()), calculée une seule fois
   if (useProgress) {
-    const vminRem = formatNumber(minViewport / rootFont, 3)
-    const vmaxRem = formatNumber(maxViewport / rootFont, 3)
+    // Bornes d'écran en px : au zoom texte, seules min/max (rem) suivent
     css += "  /* Progression du viewport, de 0 à 1 (progress()) */\n"
-    css += `  --fluid-min: ${vminRem}rem; /* ${minViewport}px */\n`
-    css += `  --fluid-max: ${vmaxRem}rem; /* ${maxViewport}px */\n`
+    css += `  --fluid-min: ${minViewport}px;\n`
+    css += `  --fluid-max: ${maxViewport}px;\n`
     css += "  --fluid: progress(100vw, var(--fluid-min), var(--fluid-max));\n\n"
   }
 

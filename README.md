@@ -66,6 +66,7 @@ Copiez en un clic le code généré :
   - `clamp()` : fonctionne sur tous les navigateurs modernes, mais embarque des valeurs calculées (`0.9565rem + 0.2174vw`).
   - `progress()` : calcule une seule fois la progression du viewport (`--fluid`, de 0 à 1), puis chaque token interpole entre ses deux primitives. Aucun nombre magique, support navigateur récent.
   - `@function` : fonction CSS native `--fluid()`, la plus lisible, support encore limité.
+- **Zoom texte 200 %** : avec `progress()` et `@function`, les bornes d'écran sont en `px` et les tailles en `rem`. Au zoom texte seul, le texte double donc exactement à toutes les largeurs. Avec `clamp()`, le terme `rem + vw` ne double qu'en bas de plage.
 
 ---
 

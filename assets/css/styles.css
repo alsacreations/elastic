@@ -1012,6 +1012,82 @@ code {
 }
 
 /* ----------------------------------
+ * FAQ
+ * ----------------------------------
+ */
+
+.faq {
+  display: flex;
+  flex-direction: column;
+  padding: 1.125rem 1.5rem 0.75rem;
+
+  & .card-title {
+    margin-bottom: 0.5rem;
+  }
+}
+
+.faq-item {
+  border-top: 1px solid var(--el-line);
+
+  & summary {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding-block: 0.875rem;
+    color: var(--el-ink);
+    font-weight: 600;
+    cursor: pointer;
+    list-style: none;
+
+    &::-webkit-details-marker {
+      display: none;
+    }
+
+    &::after {
+      content: "+";
+      margin-left: auto;
+      color: var(--el-primary);
+      font-size: 1.25rem;
+      line-height: 1;
+    }
+  }
+
+  &[open] summary::after {
+    content: "−";
+  }
+}
+
+.faq-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  max-width: 70ch;
+  padding-bottom: 1.125rem;
+  line-height: 1.55;
+
+  & p,
+  & pre {
+    margin: 0;
+  }
+
+  & h3 {
+    margin: 0.5rem 0 0;
+    color: var(--el-muted);
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  & pre {
+    overflow-x: auto;
+    padding: 0.75rem 1rem;
+    border-radius: var(--el-r-sm);
+    background: var(--el-code-bg);
+    color: var(--el-code-ink);
+  }
+}
+
+/* ----------------------------------
  * Pied de page
  * ----------------------------------
  */

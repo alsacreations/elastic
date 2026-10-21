@@ -450,6 +450,115 @@
         </aside>
       </div>
 
+      <section
+        class="card faq"
+        aria-labelledby="faq-title">
+        <h2
+          id="faq-title"
+          class="card-title">
+          Questions fréquentes
+        </h2>
+
+        <details class="faq-item">
+          <summary>
+            <code>clamp()</code> : comment ça marche, et pour qui ?
+          </summary>
+          <div class="faq-body">
+            <p>
+              <code>clamp(min, préférée, max)</code> borne une valeur
+              préférée calculée en <code>rem + vw</code>. Elastic calcule
+              cette droite pour qu'elle passe par la taille min à l'écran min
+              et par la taille max à l'écran max.
+            </p>
+            <pre><code>--text-m: clamp(var(--text-16), 0.951rem + 0.2174vw, var(--text-18));</code></pre>
+            <h3>Support</h3>
+            <baseline-status featureId="min-max-clamp"></baseline-status>
+            <p>
+              Chrome et Edge 79, Firefox 75, Safari 13.1 (iOS 13.4). Disponible
+              partout depuis 2020.
+            </p>
+            <h3>Accessibilité</h3>
+            <p>
+              Au zoom texte seul, la partie en <code>rem</code> double mais pas
+              la partie en <code>vw</code> : le texte ne fait ×2 qu'en bas de
+              plage (×1,3 à 1280 px pour un passage de 30 à 60 px). Au zoom de
+              page, gardez un écart min/max inférieur à ×2,5.
+            </p>
+            <h3>En bref</h3>
+            <p>
+              Le choix sûr pour la production. Son défaut : des « nombres
+              magiques » illisibles et difficiles à modifier à la main.
+            </p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>
+            <code>progress()</code> : comment ça marche, et pour qui ?
+          </summary>
+          <div class="faq-body">
+            <p>
+              <code>progress(valeur, début, fin)</code> renvoie un nombre de 0
+              à 1. Elastic calcule une seule fois la progression du viewport
+              dans <code>--fluid</code>, puis chaque token interpole entre ses
+              deux primitives.
+            </p>
+            <pre><code>--fluid: progress(100vw, 360px, 1280px);
+--text-m: calc(var(--text-16) + (var(--text-18) - var(--text-16)) * var(--fluid));</code></pre>
+            <h3>Support</h3>
+            <baseline-status featureId="progress-function"></baseline-status>
+            <p>
+              Chrome et Edge 138, Safari 26, Firefox 155. Baseline depuis
+              septembre 2026 : prévoyez <code>clamp()</code> si vous visez des
+              navigateurs plus anciens.
+            </p>
+            <h3>Accessibilité</h3>
+            <p>
+              Les bornes d'écran sont en <code>px</code> et les tailles en
+              <code>rem</code> : au zoom texte 200 %, le texte double
+              exactement, à toutes les largeurs. Au zoom de page, même limite
+              que <code>clamp()</code> : surveillez l'écart min/max.
+            </p>
+            <h3>En bref</h3>
+            <p>
+              Aucun nombre magique : tout ce qui est écrit se relit (360, 1280,
+              16, 18). Toutes les variables partagent la même plage d'écran.
+            </p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>
+            <code>@function</code> : comment ça marche, et pour qui ?
+          </summary>
+          <div class="faq-body">
+            <p>
+              Une fonction CSS native <code>--fluid()</code> encapsule le
+              calcul : chaque token l'appelle avec ses deux primitives.
+            </p>
+            <pre><code>--text-m: --fluid(var(--text-16), var(--text-18));</code></pre>
+            <h3>Support</h3>
+            <baseline-status featureId="function"></baseline-status>
+            <p>
+              Chrome et Edge 139 uniquement. Pas encore dans Firefox, en
+              Technology Preview dans Safari : à réserver aux expérimentations.
+            </p>
+            <h3>Accessibilité</h3>
+            <p>
+              Comme <code>progress()</code> : bornes d'écran en
+              <code>px</code>, le texte double exactement au zoom texte 200 %.
+              Au zoom de page, surveillez l'écart min/max.
+            </p>
+            <h3>En bref</h3>
+            <p>
+              La syntaxe la plus lisible, et la plus réutilisable : la fonction
+              peut servir ailleurs que dans les tokens. Mais elle n'a aucun
+              effet dans les navigateurs qui ne la comprennent pas.
+            </p>
+          </div>
+        </details>
+      </section>
+
       <div
         id="clamp-status"
         class="visually-hidden"
@@ -480,5 +589,8 @@
     <script
       type="module"
       src="assets/js/clamp/app.js"></script>
+    <script
+      type="module"
+      src="https://cdn.jsdelivr.net/npm/baseline-status@1.2.0/baseline-status.min.js"></script>
   </body>
 </html>
