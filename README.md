@@ -2,7 +2,7 @@
 
 **Elastic** est un utilitaire web léger et intuitif conçu pour créer des systèmes de design flexibles. Il permet de générer des tailles de police et des espacements qui s'adaptent harmonieusement à la largeur de l'écran, sans avoir recours à de multiples points de rupture (_breakpoints_).
 
-Inspiré par la philosophie de [Utopia](https://utopia.fyi/), Elastic utilise la fonction CSS `clamp()` pour interpoler les valeurs entre une taille minimale et une taille maximale, garantissant une expérience utilisateur fluide sur tous les appareils.
+Inspiré par la philosophie de [Utopia](https://utopia.fyi/), Elastic interpole les valeurs entre une taille minimale et une taille maximale, garantissant une expérience utilisateur fluide sur tous les appareils. Trois formats de sortie sont proposés : `clamp()`, `progress()` et `@function`.
 
 ---
 
@@ -35,7 +35,7 @@ Visualisez instantanément la courbe de fluidité grâce à un graphique dynamiq
 
 Copiez en un clic le code généré :
 
-- `theme.css` : Contient à la fois les définitions des variables de base (primitives) et les tokens de design prêts à l'emploi utilisant `clamp()`.
+- `theme.css` : Contient à la fois les définitions des variables de base (primitives) et les tokens de design prêts à l'emploi, dans le format choisi.
 
 ---
 
@@ -62,7 +62,10 @@ Copiez en un clic le code généré :
 
 - **Bornes du Viewport** : Les calculs sont basés sur une plage allant de **360px** (mobile) à **1280px** (desktop large).
 - **Unités** : Le code généré convertit automatiquement les pixels en `rem` (base 16px) pour respecter les préférences d'accessibilité des utilisateurs.
-- **Compatibilité** : Fonctionne sur tous les navigateurs modernes (support de `clamp()`, `calc()` et variables CSS).
+- **Formats de sortie** : quelle que soit la méthode, la syntaxe d'usage reste `font-size: var(--text-m)`.
+  - `clamp()` : fonctionne sur tous les navigateurs modernes, mais embarque des valeurs calculées (`0.9565rem + 0.2174vw`).
+  - `progress()` : calcule une seule fois la progression du viewport (`--fluid`, de 0 à 1), puis chaque token interpole entre ses deux primitives. Aucun nombre magique, support navigateur récent.
+  - `@function` : fonction CSS native `--fluid()`, la plus lisible, support encore limité.
 
 ---
 

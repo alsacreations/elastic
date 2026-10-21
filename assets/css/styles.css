@@ -796,6 +796,10 @@ code {
   }
 }
 
+.preview .note {
+  margin: 0;
+}
+
 .preview-list {
   display: flex;
   flex-direction: column;

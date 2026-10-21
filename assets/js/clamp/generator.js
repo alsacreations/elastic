@@ -1,7 +1,7 @@
 // generator.js
 // Exporte une fonction generateCSS(rows, options)
 // rows: [{slug: 'text-m', min: 16, max: 18}, ...]
-// options: {minViewport:360, maxViewport:1280, rootFontPx:16, format:"clamp"|"function"}
+// options: {minViewport:360, maxViewport:1280, rootFontPx:16, format:"clamp"|"progress"|"function"}
 
 function toNumber(v) {
   const n = Number(v)
@@ -25,6 +25,7 @@ export function generateCSS(rows, options = {}) {
   const maxViewport = Number(options.maxViewport ?? 1280)
   const rootFont = Number(options.rootFontPx ?? 16)
   const useFunction = options.format === "function"
+  const useProgress = options.format === "progress"
 
   // base variables (min/max static in rem)
   const baseVars = []
@@ -136,6 +137,8 @@ export function generateCSS(rows, options = {}) {
       return `  --${t.slug}: var(${t.minVarName});`
     } else if (useFunction) {
       return `  --${t.slug}: --fluid(var(${t.minVarName}), var(${t.maxVarName}));`
+    } else if (useProgress) {
+      return `  --${t.slug}: calc(var(${t.minVarName}) + (var(${t.maxVarName}) - var(${t.minVarName})) * var(--fluid));`
     } else {
       const interceptRemStr = formatNumber(t.interceptRem, 3)
       const slopeVwStr = formatNumber(t.slopePxPerVw, 4)
@@ -182,6 +185,16 @@ export function generateCSS(rows, options = {}) {
   }
 
   css += ":root {\n"
+
+  // Progression du viewport (progress()), calculée une seule fois
+  if (useProgress) {
+    const vminRem = formatNumber(minViewport / rootFont, 3)
+    const vmaxRem = formatNumber(maxViewport / rootFont, 3)
+    css += "  /* Progression du viewport, de 0 à 1 (progress()) */\n"
+    css += `  --fluid-min: ${vminRem}rem; /* ${minViewport}px */\n`
+    css += `  --fluid-max: ${vmaxRem}rem; /* ${maxViewport}px */\n`
+    css += "  --fluid: progress(100vw, var(--fluid-min), var(--fluid-max));\n\n"
+  }
 
   // 1. Typographie Primitives
   css += "  /* Typographie (Primitives) */\n"

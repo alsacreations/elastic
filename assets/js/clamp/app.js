@@ -1,5 +1,6 @@
 import {
   createRow,
+  isFormatSupported,
   readRow,
   renderCode,
   renderPreview,
@@ -132,7 +133,9 @@ function sanitize(cfg) {
     vmin: num(cfg.vmin, DEFAULTS.vmin),
     vmax: num(cfg.vmax, DEFAULTS.vmax),
     root: num(cfg.root, DEFAULTS.root),
-    format: cfg.format === "function" ? "function" : "clamp",
+    format: ["progress", "function"].includes(cfg.format)
+      ? cfg.format
+      : "clamp",
     text: rows(cfg.text, DEFAULTS.text),
     spacing: rows(cfg.spacing, DEFAULTS.spacing),
   }
@@ -194,6 +197,8 @@ function init() {
     counts: { text: q("#count-text"), spacing: q("#count-spacing") },
     note: q("#a11y-note"),
     preview: q("#preview-list"),
+    supportNote: q("#support-note"),
+    supportFormat: q("#support-format"),
     vmin: q("#opt-vmin"),
     vmax: q("#opt-vmax"),
     root: q("#opt-root"),
@@ -269,12 +274,17 @@ function init() {
     })
     el.note.hidden = !anyWarn
 
-    // Aperçu
+    // Aperçu (non simulé si le navigateur ne comprend pas le format)
+    const supported = isFormatSupported(cfg.format)
+    el.supportNote.hidden = supported
+    el.supportFormat.textContent =
+      cfg.format === "function" ? "@function" : `${cfg.format}()`
     renderPreview(el.preview, cfg[activeTab], {
       width,
       vmin,
       vmax,
       kind: activeTab,
+      simulate: supported,
     })
 
     // Format

@@ -226,9 +226,37 @@ export function updateRowVisual(tr, ctx) {
   q("span", badge).textContent = `×${formatNumber(ratio, 1).replace(".", ",")}`
 }
 
+const PREVIEW_TEXT =
+  "Portez ce vieux schnaps au kiwi joufflu qui mange un bretzel"
+
+/** Le navigateur comprend-il le format de sortie ? (résultat mis en cache) */
+const supportCache = {}
+export function isFormatSupported(format) {
+  if (format in supportCache) return supportCache[format]
+  let ok = true
+  if (format === "progress") {
+    ok = CSS.supports("width", "calc(progress(1px, 0px, 2px) * 1px)")
+  } else if (format === "function") {
+    // CSS.supports() ne teste pas les at-rules : sonde avec une @function réelle
+    const style = document.createElement("style")
+    style.textContent =
+      "@function --elastic-probe() returns <length> { result: 3px; }" +
+      ".elastic-probe { position: absolute; width: --elastic-probe(); }"
+    const probe = document.createElement("div")
+    probe.className = "elastic-probe"
+    document.head.appendChild(style)
+    document.body.appendChild(probe)
+    ok = probe.getBoundingClientRect().width === 3
+    probe.remove()
+    style.remove()
+  }
+  supportCache[format] = ok
+  return ok
+}
+
 /** Aperçu : phrases test (typographie) ou barres (espacements) */
 export function renderPreview(container, rows, ctx) {
-  const { width, vmin, vmax, kind } = ctx
+  const { width, vmin, vmax, kind, simulate = true } = ctx
   container.replaceChildren()
   rows.forEach((row) => {
     const value = valueAt(row, width, vmin, vmax)
@@ -238,8 +266,22 @@ export function renderPreview(container, rows, ctx) {
 
     const label = document.createElement("span")
     label.className = "preview-label"
-    label.textContent = `${row.slug} · ${formatNumber(value, 1)}`
+    label.textContent = simulate
+      ? `${row.slug} · ${formatNumber(value, 1)}`
+      : row.slug
     line.appendChild(label)
+
+    // Format non supporté : pas de taille simulée, rendu par défaut
+    if (!simulate) {
+      if (kind !== "spacing") {
+        const sample = document.createElement("span")
+        sample.className = "preview-sample"
+        sample.textContent = PREVIEW_TEXT
+        line.appendChild(sample)
+      }
+      container.appendChild(line)
+      return
+    }
 
     if (kind === "spacing") {
       const bar = document.createElement("div")
@@ -250,7 +292,7 @@ export function renderPreview(container, rows, ctx) {
       const sample = document.createElement("span")
       sample.className = "preview-sample"
       sample.style.fontSize = `${value}px`
-      sample.textContent = "Portez ce vieux schnaps au kiwi joufflu qui mange un bretzel"
+      sample.textContent = PREVIEW_TEXT
       line.appendChild(sample)
     }
     container.appendChild(line)

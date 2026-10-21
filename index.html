@@ -8,7 +8,7 @@
     <title>Elastic, générateur de typographies et d'espacements fluides</title>
     <meta
       name="description"
-      content="Elastic génère des tailles de police et des espacements fluides en CSS avec clamp() ou @function, sans media queries." />
+      content="Elastic génère des tailles de police et des espacements fluides en CSS avec clamp(), progress() ou @function, sans media queries." />
     <link
       rel="preload"
       href="assets/fonts/Dynapuff-VariableFont-opti.woff2"
@@ -314,6 +314,26 @@
               <p class="hint">Bougez la règle : l'échelle s'étire.</p>
             </div>
             <div
+              id="support-note"
+              class="note"
+              role="note"
+              hidden>
+              <svg
+                class="icon"
+                viewBox="0 0 24 24"
+                aria-hidden="true">
+                <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3" />
+                <path d="M12 9v4" />
+                <path d="M12 17h.01" />
+              </svg>
+              <p>
+                <strong>Non supporté par ce navigateur :</strong>
+                <code id="support-format"></code> n'est pas reconnu ici, les
+                variables générées n'auraient aucun effet. L'aperçu n'est donc
+                pas simulé.
+              </p>
+            </div>
+            <div
               id="preview-list"
               class="preview-list"></div>
           </section>
@@ -369,6 +389,14 @@
                   aria-pressed="true">
                   <code>clamp()</code>
                   <span>Fonctionne partout</span>
+                </button>
+                <button
+                  class="seg"
+                  type="button"
+                  data-format="progress"
+                  aria-pressed="false">
+                  <code>progress()</code>
+                  <span>Sans nombres magiques · support récent</span>
                 </button>
                 <button
                   class="seg"
