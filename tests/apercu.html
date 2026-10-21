@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1" />
+    <title>Test de l'aperçu · Elastic</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --ok: #1a7f4b;
+        --ko: #b42318;
+        --skip: #6b6075;
+        --line: #ebe5ee;
+      }
+
+      body {
+        max-width: 60rem;
+        margin: 0 auto;
+        padding: 1.5rem 1rem;
+        background: #f6f3f7;
+        color: #241a2b;
+        font-family: system-ui, sans-serif;
+        line-height: 1.5;
+      }
+
+      h1 {
+        margin-top: 0;
+        font-size: 1.5rem;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        background: #fff;
+      }
+
+      th,
+      td {
+        padding: 0.5rem 0.75rem;
+        border-bottom: 1px solid var(--line);
+        text-align: left;
+      }
+
+      code {
+        font-family: ui-monospace, Menlo, monospace;
+        font-size: 0.875em;
+      }
+
+      .ok {
+        color: var(--ok);
+      }
+
+      .ko {
+        color: var(--ko);
+      }
+
+      .skip {
+        color: var(--skip);
+      }
+
+      #summary {
+        font-weight: 600;
+      }
+
+      #bench {
+        position: absolute;
+        visibility: hidden;
+        pointer-events: none;
+      }
+
+      #bench iframe {
+        display: block;
+        max-width: none;
+        height: 10px;
+        border: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Test de l'aperçu</h1>
+    <p>
+      Pour chaque format, cette page génère le CSS avec
+      <code>generateCSS()</code>, le rend dans des iframes de largeur fixe (où
+      <code>100vw</code> vaut la largeur de l'iframe) et compare la taille
+      obtenue à celle qu'affiche l'aperçu (<code>valueAt()</code>). Tolérance :
+      <span id="tolerance"></span> px.
+    </p>
+    <p
+      id="summary"
+      role="status">
+      Test en cours…
+    </p>
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Format</th>
+          <th scope="col">Résultat</th>
+          <th scope="col">Mesures</th>
+          <th scope="col">Écart max</th>
+          <th scope="col">Pire cas</th>
+        </tr>
+      </thead>
+      <tbody id="results"></tbody>
+    </table>
+    <div
+      id="bench"
+      aria-hidden="true"></div>
+
+    <script type="module">
+      import { generateCSS } from "../assets/js/clamp/generator.js"
+      import { valueAt, isFormatSupported } from "../assets/js/clamp/ui.js"
+
+      // Arrondis de clamp() (3-4 décimales) et du moteur (1/64 px)
+      const TOLERANCE = 0.05
+
+      const ROWS = [
+        { slug: "text-s", min: 14, max: 16 },
+        { slug: "text-m", min: 16, max: 18 },
+        { slug: "text-xl", min: 30, max: 60 },
+        { slug: "text-4xl", min: 48, max: 80 },
+        { slug: "text-fixe", min: 20, max: 20 },
+        { slug: "spacing-m", min: 16, max: 32 },
+      ]
+      const CONFIGS = [
+        { vmin: 360, vmax: 1280, root: 16 },
+        { vmin: 320, vmax: 1440, root: 16 },
+        { vmin: 360, vmax: 1280, root: 10 },
+      ]
+      const WIDTHS = [300, 360, 375, 500, 768, 841, 1000, 1280, 1440, 1600]
+      const FORMATS = ["clamp", "progress", "function"]
+
+      const bench = document.querySelector("#bench")
+      const tbody = document.querySelector("#results")
+      document.querySelector("#tolerance").textContent = TOLERANCE
+
+      /** Rend le CSS dans une iframe de largeur donnée, renvoie les tailles (px) */
+      async function measure(css, width, root) {
+        const frame = document.createElement("iframe")
+        frame.style.width = `${width}px`
+        const rules = ROWS.map((r) => `.${r.slug}{width:var(--${r.slug})}`)
+        frame.srcdoc =
+          `<style>html{font-size:${root}px}${css}${rules.join("")}</style>` +
+          ROWS.map((r) => `<div class="${r.slug}"></div>`).join("")
+        const loaded = new Promise((resolve) => (frame.onload = resolve))
+        bench.appendChild(frame)
+        await loaded
+        const win = frame.contentWindow
+        if (win.innerWidth !== width) {
+          frame.remove()
+          throw new Error(`iframe à ${win.innerWidth}px au lieu de ${width}px`)
+        }
+        const sizes = Object.fromEntries(
+          ROWS.map((r) => [
+            r.slug,
+            frame.contentDocument
+              .querySelector(`.${r.slug}`)
+              .getBoundingClientRect().width,
+          ]),
+        )
+        frame.remove()
+        return sizes
+      }
+
+      async function testFormat(format) {
+        let count = 0
+        let maxGap = 0
+        let worst = null
+        for (const cfg of CONFIGS) {
+          const { themeCss } = generateCSS(ROWS, {
+            minViewport: cfg.vmin,
+            maxViewport: cfg.vmax,
+            rootFontPx: cfg.root,
+            format,
+          })
+          for (const width of WIDTHS) {
+            const sizes = await measure(themeCss, width, cfg.root)
+            for (const row of ROWS) {
+              const expected = valueAt(row, width, cfg.vmin, cfg.vmax)
+              const gap = Math.abs(sizes[row.slug] - expected)
+              count++
+              if (gap >= maxGap) {
+                maxGap = gap
+                worst = { cfg, width, row, real: sizes[row.slug], expected }
+              }
+            }
+          }
+        }
+        return { count, maxGap, worst }
+      }
+
+      function cell(text, className) {
+        const td = document.createElement("td")
+        td.textContent = text
+        if (className) td.className = className
+        return td
+      }
+
+      const fmt = (n) => n.toFixed(3)
+      let failures = 0
+      let tested = 0
+
+      for (const format of FORMATS) {
+        const tr = document.createElement("tr")
+        const name = document.createElement("td")
+        const code = document.createElement("code")
+        code.textContent = format === "function" ? "@function" : `${format}()`
+        name.appendChild(code)
+        tr.appendChild(name)
+
+        if (!isFormatSupported(format)) {
+          tr.append(
+            cell("— non supporté ici, ignoré", "skip"),
+            cell("0"),
+            cell("—"),
+            cell("—"),
+          )
+          tbody.appendChild(tr)
+          continue
+        }
+
+        try {
+          const { count, maxGap, worst } = await testFormat(format)
+          const ok = maxGap <= TOLERANCE
+          tested++
+          if (!ok) failures++
+          const { cfg, width, row, real, expected } = worst
+          tr.append(
+            cell(ok ? "✅ conforme" : "❌ écart", ok ? "ok" : "ko"),
+            cell(String(count)),
+            cell(`${fmt(maxGap)} px`),
+            cell(
+              `${row.slug} à ${width} px (${cfg.vmin}–${cfg.vmax}, racine ${cfg.root}) : ` +
+                `rendu ${fmt(real)} / aperçu ${fmt(expected)}`,
+            ),
+          )
+        } catch (error) {
+          failures++
+          tr.append(cell(`❌ ${error.message}`, "ko"), cell("—"), cell("—"), cell("—"))
+        }
+        tbody.appendChild(tr)
+      }
+
+      const summary = document.querySelector("#summary")
+      summary.textContent = failures
+        ? `❌ ${failures} format(s) en écart avec l'aperçu.`
+        : `✅ L'aperçu correspond au rendu réel pour les ${tested} format(s) testé(s).`
+      summary.className = failures ? "ko" : "ok"
+    </script>
+  </body>
+</html>

@@ -70,6 +70,19 @@ Copiez en un clic le code généré :
 
 ---
 
+## 🧪 Tests
+
+La page `tests/apercu.html` vérifie que l'aperçu affiche les mêmes tailles que le CSS généré, pour les trois formats. Elle rend le CSS dans des iframes de largeur fixe et compare le résultat à la formule de l'aperçu (tolérance : 0,05 px). Les formats que le navigateur ne connaît pas sont ignorés.
+
+Ouvrez-la via un serveur local (les modules JavaScript ne se chargent pas en `file://`) :
+
+```sh
+python3 -m http.server
+# puis http://localhost:8000/tests/apercu.html
+```
+
+---
+
 ## ✨ Crédits
 
 Développé avec passion par **Alsacreations**.
