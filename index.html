@@ -39,7 +39,12 @@
       <header class="app-header">
         <h1
           class="logo"
-          aria-label="Elastic"><span data-char="E">E</span><span data-char="l">l</span><span data-char="a">a</span><span data-char="s">s</span><span data-char="t">t</span><span data-char="i">i</span><span data-char="c">c</span></h1>
+          aria-label="Elastic">
+          <span data-char="E">E</span><span data-char="l">l</span
+          ><span data-char="a">a</span><span data-char="s">s</span
+          ><span data-char="t">t</span><span data-char="i">i</span
+          ><span data-char="c">c</span>
+        </h1>
         <p class="tagline">
           Des tailles de texte et des espacements qui
           <strong>s'étirent</strong> avec l'écran. Sans media queries.
@@ -68,8 +73,10 @@
               class="icon"
               viewBox="0 0 24 24"
               aria-hidden="true">
-              <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
-              <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+              <path
+                d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+              <path
+                d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
             </svg>
             <span class="btn-label">Partager</span>
           </button>
@@ -177,7 +184,8 @@
                   type="button"
                   aria-selected="true"
                   aria-controls="panel-text">
-                  Typographie <span
+                  Typographie
+                  <span
                     class="count"
                     id="count-text"
                     >3</span
@@ -191,7 +199,8 @@
                   aria-selected="false"
                   aria-controls="panel-spacing"
                   tabindex="-1">
-                  Espacements <span
+                  Espacements
+                  <span
                     class="count"
                     id="count-spacing"
                     >3</span
@@ -289,7 +298,8 @@
                 class="icon"
                 viewBox="0 0 24 24"
                 aria-hidden="true">
-                <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3" />
+                <path
+                  d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3" />
                 <path d="M12 9v4" />
                 <path d="M12 17h.01" />
               </svg>
@@ -322,7 +332,8 @@
                 class="icon"
                 viewBox="0 0 24 24"
                 aria-hidden="true">
-                <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3" />
+                <path
+                  d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3" />
                 <path d="M12 9v4" />
                 <path d="M12 17h.01" />
               </svg>
@@ -336,6 +347,119 @@
             <div
               id="preview-list"
               class="preview-list"></div>
+          </section>
+
+          <section
+            class="card faq"
+            aria-labelledby="faq-title">
+            <h2
+              id="faq-title"
+              class="card-title">
+              Les détails techniques de chaque solution
+            </h2>
+
+            <details class="faq-item">
+              <summary>
+                <code>clamp()</code>
+              </summary>
+              <div class="faq-body">
+                <p>
+                  <code>clamp(min, préférée, max)</code> borne une valeur
+                  préférée calculée en <code>rem + vw</code>. Elastic calcule
+                  cette droite pour qu'elle passe par la taille min à l'écran
+                  min et par la taille max à l'écran max.
+                </p>
+                <pre><code>--text-m: clamp(var(--text-16), 0.951rem + 0.2174vw, var(--text-18));</code></pre>
+                <h3>Support</h3>
+                <baseline-status featureId="min-max-clamp"></baseline-status>
+                <p>
+                  Chrome et Edge 79, Firefox 75, Safari 13.1 (iOS 13.4).
+                  Disponible partout depuis 2020.
+                </p>
+                <h3>Accessibilité</h3>
+                <p>
+                  Au zoom texte seul, la partie en <code>rem</code> double mais
+                  pas la partie en <code>vw</code> : le texte ne fait ×2 qu'en
+                  bas de plage (×1,3 à 1280 px pour un passage de 30 à 60 px).
+                  Au zoom de page, gardez un écart min/max inférieur à ×2,5.
+                </p>
+                <h3>En bref</h3>
+                <p>
+                  Le choix sûr pour la production. Son défaut : des « nombres
+                  magiques » illisibles et difficiles à modifier à la main.
+                </p>
+              </div>
+            </details>
+
+            <details class="faq-item">
+              <summary>
+                <code>progress()</code>
+              </summary>
+              <div class="faq-body">
+                <p>
+                  <code>progress(valeur, début, fin)</code> renvoie un nombre de
+                  0 à 1. Elastic calcule une seule fois la progression du
+                  viewport dans <code>--fluid</code>, puis chaque token
+                  interpole entre ses deux primitives.
+                </p>
+                <pre><code>--fluid: progress(100vw, 360px, 1280px);
+    --text-m: calc(var(--text-16) + (var(--text-18) - var(--text-16)) * var(--fluid));</code></pre>
+                <h3>Support</h3>
+                <baseline-status
+                  featureId="progress-function"></baseline-status>
+                <p>
+                  Chrome et Edge 138, Safari 26, Firefox 155. Baseline depuis
+                  septembre 2026 : prévoyez <code>clamp()</code> si vous visez
+                  des navigateurs plus anciens.
+                </p>
+                <h3>Accessibilité</h3>
+                <p>
+                  Les bornes d'écran sont en <code>px</code> et les tailles en
+                  <code>rem</code> : au zoom texte 200 %, le texte double
+                  exactement, à toutes les largeurs. Au zoom de page, même
+                  limite que <code>clamp()</code> : surveillez l'écart min/max.
+                </p>
+                <h3>En bref</h3>
+                <p>
+                  Aucun nombre magique : tout ce qui est écrit se relit (360,
+                  1280, 16, 18). Toutes les variables partagent la même plage
+                  d'écran.
+                </p>
+              </div>
+            </details>
+
+            <details class="faq-item">
+              <summary>
+                <code>@function</code>
+              </summary>
+              <div class="faq-body">
+                <p>
+                  Une fonction CSS native <code>--fluid()</code> encapsule le
+                  calcul : chaque token l'appelle avec ses deux primitives.
+                </p>
+                <pre><code>--text-m: --fluid(var(--text-16), var(--text-18));</code></pre>
+                <h3>Support</h3>
+                <baseline-status featureId="function"></baseline-status>
+                <p>
+                  Chrome et Edge 139 uniquement. Pas encore dans Firefox, en
+                  Technology Preview dans Safari : à réserver aux
+                  expérimentations.
+                </p>
+                <h3>Accessibilité</h3>
+                <p>
+                  Comme <code>progress()</code> : bornes d'écran en
+                  <code>px</code>, le texte double exactement au zoom texte 200
+                  %. Au zoom de page, surveillez l'écart min/max.
+                </p>
+                <h3>En bref</h3>
+                <p>
+                  La syntaxe la plus lisible, et la plus réutilisable : la
+                  fonction peut servir ailleurs que dans les tokens. Mais elle
+                  n'a aucun effet dans les navigateurs qui ne la comprennent
+                  pas.
+                </p>
+              </div>
+            </details>
           </section>
         </main>
 
@@ -437,7 +561,8 @@
                     y="8"
                     rx="2"
                     ry="2" />
-                  <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+                  <path
+                    d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
                 </svg>
                 <span class="btn-label">Copier</span>
               </button>
@@ -449,115 +574,6 @@
           </section>
         </aside>
       </div>
-
-      <section
-        class="card faq"
-        aria-labelledby="faq-title">
-        <h2
-          id="faq-title"
-          class="card-title">
-          Questions fréquentes
-        </h2>
-
-        <details class="faq-item">
-          <summary>
-            <code>clamp()</code> : comment ça marche, et pour qui ?
-          </summary>
-          <div class="faq-body">
-            <p>
-              <code>clamp(min, préférée, max)</code> borne une valeur
-              préférée calculée en <code>rem + vw</code>. Elastic calcule
-              cette droite pour qu'elle passe par la taille min à l'écran min
-              et par la taille max à l'écran max.
-            </p>
-            <pre><code>--text-m: clamp(var(--text-16), 0.951rem + 0.2174vw, var(--text-18));</code></pre>
-            <h3>Support</h3>
-            <baseline-status featureId="min-max-clamp"></baseline-status>
-            <p>
-              Chrome et Edge 79, Firefox 75, Safari 13.1 (iOS 13.4). Disponible
-              partout depuis 2020.
-            </p>
-            <h3>Accessibilité</h3>
-            <p>
-              Au zoom texte seul, la partie en <code>rem</code> double mais pas
-              la partie en <code>vw</code> : le texte ne fait ×2 qu'en bas de
-              plage (×1,3 à 1280 px pour un passage de 30 à 60 px). Au zoom de
-              page, gardez un écart min/max inférieur à ×2,5.
-            </p>
-            <h3>En bref</h3>
-            <p>
-              Le choix sûr pour la production. Son défaut : des « nombres
-              magiques » illisibles et difficiles à modifier à la main.
-            </p>
-          </div>
-        </details>
-
-        <details class="faq-item">
-          <summary>
-            <code>progress()</code> : comment ça marche, et pour qui ?
-          </summary>
-          <div class="faq-body">
-            <p>
-              <code>progress(valeur, début, fin)</code> renvoie un nombre de 0
-              à 1. Elastic calcule une seule fois la progression du viewport
-              dans <code>--fluid</code>, puis chaque token interpole entre ses
-              deux primitives.
-            </p>
-            <pre><code>--fluid: progress(100vw, 360px, 1280px);
---text-m: calc(var(--text-16) + (var(--text-18) - var(--text-16)) * var(--fluid));</code></pre>
-            <h3>Support</h3>
-            <baseline-status featureId="progress-function"></baseline-status>
-            <p>
-              Chrome et Edge 138, Safari 26, Firefox 155. Baseline depuis
-              septembre 2026 : prévoyez <code>clamp()</code> si vous visez des
-              navigateurs plus anciens.
-            </p>
-            <h3>Accessibilité</h3>
-            <p>
-              Les bornes d'écran sont en <code>px</code> et les tailles en
-              <code>rem</code> : au zoom texte 200 %, le texte double
-              exactement, à toutes les largeurs. Au zoom de page, même limite
-              que <code>clamp()</code> : surveillez l'écart min/max.
-            </p>
-            <h3>En bref</h3>
-            <p>
-              Aucun nombre magique : tout ce qui est écrit se relit (360, 1280,
-              16, 18). Toutes les variables partagent la même plage d'écran.
-            </p>
-          </div>
-        </details>
-
-        <details class="faq-item">
-          <summary>
-            <code>@function</code> : comment ça marche, et pour qui ?
-          </summary>
-          <div class="faq-body">
-            <p>
-              Une fonction CSS native <code>--fluid()</code> encapsule le
-              calcul : chaque token l'appelle avec ses deux primitives.
-            </p>
-            <pre><code>--text-m: --fluid(var(--text-16), var(--text-18));</code></pre>
-            <h3>Support</h3>
-            <baseline-status featureId="function"></baseline-status>
-            <p>
-              Chrome et Edge 139 uniquement. Pas encore dans Firefox, en
-              Technology Preview dans Safari : à réserver aux expérimentations.
-            </p>
-            <h3>Accessibilité</h3>
-            <p>
-              Comme <code>progress()</code> : bornes d'écran en
-              <code>px</code>, le texte double exactement au zoom texte 200 %.
-              Au zoom de page, surveillez l'écart min/max.
-            </p>
-            <h3>En bref</h3>
-            <p>
-              La syntaxe la plus lisible, et la plus réutilisable : la fonction
-              peut servir ailleurs que dans les tokens. Mais elle n'a aucun
-              effet dans les navigateurs qui ne la comprennent pas.
-            </p>
-          </div>
-        </details>
-      </section>
 
       <div
         id="clamp-status"
@@ -578,7 +594,8 @@
             class="icon"
             viewBox="0 0 24 24"
             aria-hidden="true">
-            <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
+            <path
+              d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
             <path d="M9 18c-4.51 2-5-2-7-2" />
           </svg>
           Voir le dépôt sur GitHub

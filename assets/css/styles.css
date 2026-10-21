@@ -1026,34 +1026,36 @@ code {
   }
 }
 
+/* S'appuie sur natives.css (flèche, transition) : seules les variables changent */
 .faq-item {
+  --details-padding: 0.875rem 0;
+  --details-border-width: 0;
+  --details-background-color: transparent;
+  --details-text-color: var(--el-ink);
+
   border-top: 1px solid var(--el-line);
+  border-radius: 0;
 
   & summary {
-    display: flex;
-    align-items: center;
+    justify-content: flex-start;
     gap: 0.5rem;
-    padding-block: 0.875rem;
-    color: var(--el-ink);
-    font-weight: 600;
-    cursor: pointer;
-    list-style: none;
 
-    &::-webkit-details-marker {
-      display: none;
+    /* Flèche en masque : suit la couleur du texte (la page n'a pas de mode sombre) */
+    &::after {
+      flex: none;
+      margin-left: auto;
+      background: currentcolor;
+      mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path fill='none' stroke='black' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/></svg>")
+        center / contain no-repeat;
     }
 
-    &::after {
-      content: "+";
-      margin-left: auto;
+    &:hover {
       color: var(--el-primary);
-      font-size: 1.25rem;
-      line-height: 1;
     }
   }
 
-  &[open] summary::after {
-    content: "−";
+  &::details-content {
+    padding: 0;
   }
 }
 
